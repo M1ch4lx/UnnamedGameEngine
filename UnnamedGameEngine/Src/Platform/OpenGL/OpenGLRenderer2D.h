@@ -2,7 +2,7 @@
 
 #include "Renderer/Renderer2D.h"
 
-namespace Atron
+namespace UEngine
 {
 	class OpenGLRenderer2D :public Renderer2D
 	{

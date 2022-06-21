@@ -1,7 +1,7 @@
 #include "Pch.h"
 #include "Entity.h"
 
-namespace Atron
+namespace UEngine
 {
 	Service<ComponentsService> Entity::componentsService;
 

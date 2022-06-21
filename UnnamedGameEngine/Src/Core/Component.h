@@ -6,7 +6,7 @@
 #include "System.h"
 #include "Container.h"
 
-namespace Atron
+namespace UEngine
 {
 	using ComponentTypeID = size_t;
 

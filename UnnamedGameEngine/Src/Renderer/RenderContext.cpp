@@ -1,7 +1,7 @@
 #include "Pch.h"
 #include "RenderContext.h"
 
-namespace Atron
+namespace UEngine
 {
 	RenderContext* RenderContext::currentContext = nullptr;
 

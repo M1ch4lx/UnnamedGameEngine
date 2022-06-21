@@ -6,7 +6,7 @@
 
 #include "Signal.h"
 
-namespace Atron
+namespace UEngine
 {
 	struct WindowProps
 	{

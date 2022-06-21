@@ -1,7 +1,7 @@
 #include "Pch.h"
 #include "System.h"
 
-namespace Atron
+namespace UEngine
 {
 	ISystem::ISystem() :
 		running(false)

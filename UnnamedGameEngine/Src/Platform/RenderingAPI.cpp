@@ -1,7 +1,7 @@
 #include "Pch.h"
 #include "RenderingAPI.h"
 
-namespace Atron
+namespace UEngine
 {
 	void RenderingAPI::InitializeOpenGL()
 	{

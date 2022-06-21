@@ -1,7 +1,7 @@
 #include "Pch.h"
 #include "Camera.h"
 
-namespace Atron
+namespace UEngine
 {
 	Camera::Camera() :
 		ratio(16.f, 9.f), size(6.f)

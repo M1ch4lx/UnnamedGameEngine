@@ -2,7 +2,7 @@
 
 #include "Common.h"
 
-namespace Atron
+namespace UEngine
 {
 	template<typename TSignal>
 	using SignalCallback = std::function<void(TSignal&)>;

@@ -1,7 +1,7 @@
 #include "Pch.h"
 #include "Component.h"
 
-namespace Atron
+namespace UEngine
 {
 	Component::Component() :
 		owner(nullptr), typeId(-1)

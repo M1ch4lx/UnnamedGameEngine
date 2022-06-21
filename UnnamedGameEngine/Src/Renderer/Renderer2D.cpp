@@ -1,7 +1,7 @@
 #include "Pch.h"
 #include "Renderer2D.h"
 
-namespace Atron
+namespace UEngine
 {
 	Renderer2D::Renderer2D() :
 		camera(nullptr), currentFrameContext(nullptr)

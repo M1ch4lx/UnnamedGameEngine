@@ -5,7 +5,7 @@
 #include "Service.h"
 #include "Component.h"
 
-namespace Atron
+namespace UEngine
 {
 	class Entity
 	{

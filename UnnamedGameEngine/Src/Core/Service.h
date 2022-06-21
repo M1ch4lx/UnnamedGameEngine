@@ -4,7 +4,7 @@
 
 #include "Core.h"
 
-namespace Atron
+namespace UEngine
 {
 	class IService
 	{

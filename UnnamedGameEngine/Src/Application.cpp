@@ -12,7 +12,7 @@
 
 #include "Platform/RenderingAPI.h"
 
-using namespace Atron;
+using namespace UEngine;
 
 template<class T>
 void Print(const std::string& text, const T& var)

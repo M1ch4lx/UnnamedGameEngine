@@ -3,7 +3,7 @@
 
 #include "Core/Factory.h"
 
-namespace Atron
+namespace UEngine
 {
 	OpenGLWindow* OpenGLWindow::ObtainWindowPtr(GLFWwindow* glfwWindow)
 	{

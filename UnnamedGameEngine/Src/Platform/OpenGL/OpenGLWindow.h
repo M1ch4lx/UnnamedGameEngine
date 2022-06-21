@@ -7,7 +7,7 @@
 
 #include "Core/Window.h"
 
-namespace Atron
+namespace UEngine
 {
 	class OpenGLContext :public RenderContext
 	{
