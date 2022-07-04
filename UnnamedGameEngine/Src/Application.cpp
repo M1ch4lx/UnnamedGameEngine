@@ -56,6 +56,42 @@ void Application::Run(int argc, char* argv[])
 
 	transformSystem->Update();*/
 
+	auto printMat = [](const Matrix4& mat)
+	{
+		for (size_t i = 0; i < 4; i++)
+		{
+			for (size_t j = 0; j < 4; j++)
+			{
+				std::cout << mat[i][j] << " ";
+			}
+			std::cout << std::endl;
+		}
+		std::cout << std::endl;
+	};
+
+	Matrix4 mat1;
+	mat1[0][0] = 1.f;
+	mat1[0][1] = 2.f;
+	mat1[0][2] = 3.f;
+	mat1[1][1] = 7.f;
+	mat1[1][2] = 8.f;
+	mat1[1][3] = 9.f;
+
+	Matrix4 mat2;
+	mat2[0][0] = 1.f;
+	mat2[0][1] = 2.f;
+	mat2[0][2] = 2.f;
+	mat2[1][1] = 1.f;
+	mat2[1][2] = 3.f;
+	mat2[1][3] = 4.f;
+	mat2[3][2] = 2.f;
+	mat2[3][3] = 1.f;
+
+	printMat(mat1);
+	printMat(mat2);
+	auto product = mat1 * mat2;
+	printMat(product);
+
 	RenderingAPI::InitializeOpenGL();
 
 	Fabricate<Window> window;

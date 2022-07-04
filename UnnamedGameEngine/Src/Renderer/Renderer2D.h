@@ -1,7 +1,7 @@
 #pragma once
 
 #include "RenderContext.h"
-#include "Camera.h"
+#include "Camera2D.h"
 
 #include "Core/Common.h"
 
@@ -12,7 +12,7 @@ namespace UEngine
 	class Renderer2D :public Transformable
 	{
 	private:
-		Camera* camera;
+		Camera2D* camera;
 
 		RenderContext* currentFrameContext;
 
@@ -31,11 +31,11 @@ namespace UEngine
 
 		void EndFrame();
 
-		void SetCamera(Camera* camera);
+		void SetCamera(Camera2D* camera);
 
 		void ClearCamera();
 
-		Camera* GetCamera();
+		Camera2D* GetCamera();
 
 		RenderContext* CurrentContext();
 	};

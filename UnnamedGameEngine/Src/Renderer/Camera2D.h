@@ -29,7 +29,7 @@ namespace UEngine
 		}
 	};
 
-	class Camera :public Transformable
+	class Camera2D :public Transformable
 	{
 	private:
 		static constexpr float SIZE_MULTIPLIER = 10.f;
@@ -41,7 +41,7 @@ namespace UEngine
 		float size;
 
 	public:
-		Camera();
+		Camera2D();
 
 		const Viewport& GetViewport() const;
 

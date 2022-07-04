@@ -30,7 +30,7 @@ namespace UEngine
 		}
 	}
 
-	void Renderer2D::SetCamera(Camera* camera)
+	void Renderer2D::SetCamera(Camera2D* camera)
 	{
 		this->camera = camera;
 	}
@@ -40,7 +40,7 @@ namespace UEngine
 		camera = nullptr;
 	}
 
-	Camera* Renderer2D::GetCamera()
+	Camera2D* Renderer2D::GetCamera()
 	{
 		return camera;
 	}
