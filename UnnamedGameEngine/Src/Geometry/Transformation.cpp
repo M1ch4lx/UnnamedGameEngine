@@ -3,26 +3,18 @@
 
 namespace UEngine
 {
-	Transformation Transformable::defaultTransformation;
-
-	Transformable::Transformable() :
-		transformation(&defaultTransformation)
+	Transformable::Transformable()
 	{
 
 	}
 
-	const Transformation* Transformable::GetTransformation() const
+	Transformation& Transformable::GetTransformation()
 	{
 		return transformation;
 	}
 
-	void Transformable::SetTransformation(Transformation* transformation)
+	void Transformable::SetTransformation(const Transformation& transformation)
 	{
-		this->transformation = transformation ? transformation : &defaultTransformation;
-	}
-
-	void Transformable::ClearTransformation()
-	{
-		SetTransformation(nullptr);
+		this->transformation = transformation;
 	}
 }

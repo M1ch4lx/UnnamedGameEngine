@@ -16,7 +16,7 @@ namespace UEngine
 		{}
 
 		template<typename... Types>
-		T* New(Types... args)
+		T* New(const Types&... args)
 		{
 			return new (allocator.Allocate()) T(args...);
 		}

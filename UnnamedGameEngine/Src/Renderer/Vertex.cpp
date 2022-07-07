@@ -3,6 +3,41 @@
 
 namespace UEngine
 {
+	unsigned int VertexElementTypeSize(VertexElementType elementType)
+	{
+		static constexpr unsigned int FloatSize = sizeof(float);
+		static constexpr unsigned int IntSize = sizeof(int);
+
+		switch (elementType)
+		{
+		case VertexElementType::Float: return FloatSize;
+		case VertexElementType::Float2: return FloatSize * 2;
+		case VertexElementType::Float3: return FloatSize * 3;
+		case VertexElementType::Float4: return FloatSize * 4;
+		}
+
+		return 0;
+	}
+
+	unsigned int VertexElementTypeCount(VertexElementType elementType)
+	{
+		switch (elementType)
+		{
+		case VertexElementType::Float: return 1;
+		case VertexElementType::Float2: return 2;
+		case VertexElementType::Float3: return 3;
+		case VertexElementType::Float4: return 4;
+		}
+
+		return 0;
+	}
+
+	VertexLayout::VertexLayout() :
+		stride(0)
+	{
+
+	}
+
 	VertexLayout::VertexLayout(std::initializer_list<VertexElementType> elementsList) :
 		stride(0)
 	{
@@ -18,7 +53,7 @@ namespace UEngine
 
 	void VertexLayout::BuildLayout()
 	{
-		size_t offset = 0;
+		unsigned int offset = 0;
 		for (auto& element : elements)
 		{
 			element.offset = offset;
@@ -32,7 +67,7 @@ namespace UEngine
 		return elements;
 	}
 
-	size_t VertexLayout::Stride() const
+	unsigned int VertexLayout::Stride() const
 	{
 		return stride;
 	}

@@ -13,6 +13,9 @@ namespace UEngine
 
 		SetFactoryImplementation<Window, OpenGLWindow>();
 		SetFactoryImplementation<Renderer2D, OpenGLRenderer2D>();
+		SetFactoryImplementation<VertexBuffer, OpenGLVertexBuffer>();
+		SetFactoryImplementation<IndexBuffer, OpenGLIndexBuffer>();
+		SetFactoryImplementation<VertexArray, OpenGLVertexArray>();
 	}
 
 	void RenderingAPI::TerminateOpenGL()

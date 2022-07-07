@@ -1,6 +1,7 @@
 #pragma once
 
-#include "glad/glad.h"
+#include "OpenGLCommon.h"
+
 #include "GLFW/glfw3.h"
 
 #include "Renderer/RenderContext.h"

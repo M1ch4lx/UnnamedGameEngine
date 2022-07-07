@@ -64,15 +64,10 @@ namespace UEngine
 			factoryTarget = new FactoryTargetImpl<Target, TargetImpl>();
 		}
 		
-		Target* Create()
+		Ref<Target> Create()
 		{
 			CheckFactoryTarget();
-			return factoryTarget->Create();
-		}
-
-		void Destroy(Target* target)
-		{
-			delete target;
+			return Ref<Target>(factoryTarget->Create());
 		}
 	};
 
@@ -83,36 +78,10 @@ namespace UEngine
 	}
 
 	template<typename Target>
-	class Fabricate
+	Ref<Target> Create()
 	{
-	private:
 		static Service<Fabricator<Target>> fabricator;
 
-		Target* target;
-
-	public:
-		Fabricate() :
-			target(fabricator->Create())
-		{}
-
-		~Fabricate()
-		{
-			fabricator->Destroy(target);
-		}
-
-		Target* operator->()
-		{
-			return target;
-		}
-
-		Target* Obtain()
-		{
-			auto ptr = target;
-			target = nullptr;
-			return ptr;
-		}
-	};
-
-	template<typename Target>
-	Service<Fabricator<Target>> Fabricate<Target>::fabricator;
+		return fabricator->Create();
+	}
 }

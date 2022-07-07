@@ -1,8 +1,10 @@
 #pragma once
 
+#include "GraphicsObject.h"
+
 namespace UEngine
 {
-	class RenderContext
+	class RenderContext :public GraphicsObject
 	{
 	protected:
 		static RenderContext* currentContext;

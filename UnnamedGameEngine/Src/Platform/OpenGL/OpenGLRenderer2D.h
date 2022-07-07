@@ -12,6 +12,5 @@ namespace UEngine
 		void OnFrameEnd() override;
 
 		void Clear() override;
-
 	};
 }

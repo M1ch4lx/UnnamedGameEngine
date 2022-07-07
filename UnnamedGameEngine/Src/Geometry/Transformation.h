@@ -20,19 +20,15 @@ namespace UEngine
 	class Transformable
 	{
 	private:
-		static Transformation defaultTransformation;
-
-		Transformation* transformation;
+		Transformation transformation;
 
 	public:
 		Transformable();
 		
-		virtual ~Transformable() {};
+		virtual ~Transformable() = default;
 
-		const Transformation* GetTransformation() const;
+		Transformation& GetTransformation();
 
-		void SetTransformation(Transformation* transformation);
-
-		void ClearTransformation();
+		void SetTransformation(const Transformation& transformation);
 	};
 }

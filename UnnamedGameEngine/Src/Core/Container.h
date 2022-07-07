@@ -32,7 +32,7 @@ namespace UEngine
 		}
 
 		template<typename... Types>
-		T* Create(Types... args)
+		T* Create(const Types&... args)
 		{
 			if (instances.size() == allocator.Capacity())
 			{

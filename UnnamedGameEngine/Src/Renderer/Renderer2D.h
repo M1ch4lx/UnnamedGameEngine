@@ -1,5 +1,6 @@
 #pragma once
 
+#include "GraphicsObject.h"
 #include "RenderContext.h"
 #include "Camera2D.h"
 
@@ -9,7 +10,7 @@
 
 namespace UEngine
 {
-	class Renderer2D :public Transformable
+	class Renderer2D :public Transformable, public GraphicsObject
 	{
 	private:
 		Camera2D* camera;
@@ -24,8 +25,6 @@ namespace UEngine
 		virtual void Clear() = 0;
 
 		Renderer2D();
-
-		virtual ~Renderer2D() {};
 
 		void BeginFrame(RenderContext* context);
 

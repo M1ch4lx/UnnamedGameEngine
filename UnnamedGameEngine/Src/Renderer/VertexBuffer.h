@@ -1,30 +1,29 @@
 #pragma once
 
+#include "GraphicsObject.h"
 #include "Vertex.h"
 
 namespace UEngine
 {
-	class VertexBuffer
+	class VertexBuffer :public GraphicsObject
 	{
 	public:
-		virtual ~VertexBuffer() = default;
-
 		virtual void Bind() = 0;
 
-		virtual void SetData(const void* data, size_t size) = 0;
+		virtual void SetData(const float* data, unsigned int dataSize) = 0;
 
-		virtual void SetLayout(const VertexLayout* layout) = 0;
+		virtual void SetLayout(const VertexLayout& layout) = 0;
+
+		virtual const VertexLayout& GetLayout() const = 0;
 	};
 
-	class IndexBuffer
+	class IndexBuffer :public GraphicsObject
 	{
 	public:
-		virtual ~IndexBuffer() = default;
-
 		virtual void Bind() const = 0;
 
-		virtual size_t GetCount() const = 0;
+		virtual unsigned int GetCount() const = 0;
 
-		// void Init(uint32_t* indices, uint32_t count);
+		virtual void SetIndices(unsigned int* indices, unsigned int count) = 0;
 	};
 }
