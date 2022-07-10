@@ -42,9 +42,14 @@ namespace UEngine
 		return m[index];
 	}
 
+	const float* Matrix4::ConstData() const
+	{
+		return m[0];
+	}
+
 	float* Matrix4::Data()
 	{
-		return reinterpret_cast<float*>(m);
+		return m[0];
 	}
 
 	Matrix4 Matrix4::operator+(const Matrix4& mat) const

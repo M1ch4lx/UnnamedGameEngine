@@ -63,6 +63,6 @@ namespace UEngine
 
 		virtual const WindowProps& Properties() = 0;
 
-		virtual RenderContext* GetContext() = 0;
+		virtual RenderContext* Context() = 0;
 	};
 }

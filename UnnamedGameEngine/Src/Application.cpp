@@ -7,10 +7,9 @@
 #include "Components/Transform.h"
 #include "Components/TransformSystem.h"
 #include "Core/Container.h"
-#include "Core/Factory.h"
 #include "Core/Signal.h"
 
-#include "Platform/RenderingAPI.h"
+#include "Platform/Graphics.h"
 
 using namespace UEngine;
 
@@ -56,7 +55,7 @@ void Application::Run(int argc, char* argv[])
 
 	transformSystem->Update();*/
 
-	auto printMat = [](const Matrix4& mat)
+	/*auto printMat = [](const Matrix4& mat)
 	{
 		for (size_t i = 0; i < 4; i++)
 		{
@@ -90,16 +89,30 @@ void Application::Run(int argc, char* argv[])
 	printMat(mat1);
 	printMat(mat2);
 	auto product = mat1 * mat2;
-	printMat(product);
+	printMat(product);*/
 
-	RenderingAPI::InitializeOpenGL();
+	auto printMat = [](const Matrix4& mat)
+	{
+		for (size_t i = 0; i < 4; i++)
+		{
+			for (size_t j = 0; j < 4; j++)
+			{
+				std::cout << mat[i][j] << " ";
+			}
+			std::cout << std::endl;
+		}
+		std::cout << std::endl;
+	};
 
-	Ref<Window> window = Create<Window>();
-	Ref<Renderer2D> renderer = Create<Renderer2D>();
+	Graphics::InitializeOpenGL();
+	auto factory = Graphics::Factory();
+	
+	auto window = factory->CreateWindow();
+	auto renderer = factory->CreateRenderer2D(window->Context());
 
-	window->Open({"Atron", 800, 600});
+	window->Open({"Atron", 960, 540});
 
-	auto context = window->GetContext();
+	auto context = window->Context();
 
 	context->Bind();
 
@@ -111,79 +124,58 @@ void Application::Run(int argc, char* argv[])
 
 	window->ConnectSignal<WindowResizeSignal>([&](WindowResizeSignal& signal)
 		{
-			std::cout << signal.Width() << " " << signal.Height() << std::endl;
+			return;
 		});
 
-	const char* vertexShaderSource = "#version 330 core\n"
-		"layout (location = 0) in vec3 aPos;\n"
-		"void main()\n"
-		"{\n"
-		"   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-		"}\0";
+	auto shader = factory->CreateShader(
+		ShaderSource("Assets/Shaders/VertexShader.glsl"),
+		ShaderSource("Assets/Shaders/FragmentShader.glsl")
+	);
 
-	const char* fragShaderSource = "#version 330 core\n"
-		"out vec4 FragColor;\n"
-		"void main()\n"
-		"{\n"
-		"	FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-		"}\0";
-
-	unsigned int vertexShader;
-	vertexShader = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-	glCompileShader(vertexShader);
-	
-	unsigned int fragmentShader;
-	fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fragmentShader, 1, &fragShaderSource, NULL);
-	glCompileShader(fragmentShader);
-
-	unsigned int shaderProgram;
-	shaderProgram = glCreateProgram();
-
-	glAttachShader(shaderProgram, vertexShader);
-	glAttachShader(shaderProgram, fragmentShader);
-	glLinkProgram(shaderProgram);
-
-	glDeleteShader(vertexShader);
-	glDeleteShader(fragmentShader);
-
-	float vertices[] = {
-	-0.5f, -0.5f, 0.0f,
-	 0.5f, -0.5f, 0.0f,
-	 0.0f,  0.5f, 0.0f
+	Vertex vertices[] = {
+		Vertex(50.f,  50.f, 0.0f),   // top right
+		Vertex(50.f, -50.f, 0.0f),   // bottom right
+		Vertex(-50.f, -50.f, 0.0f),  // bottom left
+		Vertex(-50.f,  50.f, 0.0f)   // top left 
 	};
 
-	unsigned int VAO;
-	glGenVertexArrays(1, &VAO);
-	glBindVertexArray(VAO);
+	const auto& layout = Vertex::Layout();
 
-	VertexLayout layout = {VertexElementType::Float3};
+	auto vbo = factory->CreateVertexBuffer();
+	vbo->SetData(vertices, 4, layout);
 
-	auto vao = Create<VertexArray>();
+	unsigned int indices[] = {
+		0, 1, 3,   // first triangle
+		1, 2, 3    // second triangle
+	};
 
-	auto vbo = Create<VertexBuffer>();
-	vbo->SetData(vertices, sizeof(float) * 3 * 3);
-	vbo->SetLayout(layout);
+	auto ibo = factory->CreateIndexBuffer(indices, 6);
 
-	vao->SetVertexBuffer(vbo);
-
-	//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-	//glEnableVertexAttribArray(0);
+	auto vao = factory->CreateVertexArray(vbo, ibo);
 	
-	glUseProgram(shaderProgram);
+	shader->Bind();
 	vao->Bind();
+
+	Camera2D camera;
+	renderer->SetCamera(camera);
+
+	printMat(renderer->GetViewMatrix());
+	printMat(renderer->GetProjectionMatrix());
+
+	auto cSize = camera.CalculateSize();
+	std::cout << cSize.x << " " << cSize.y << std::endl;
+
+	shader->SetMatrix4("view", renderer->GetViewMatrix());
+	shader->SetMatrix4("projection", renderer->GetProjectionMatrix());
 
 	while (window->IsOpen())
 	{
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 		context->SwapBuffers();
 
 		window->ProcessEvents();
 	}
 
-	RenderingAPI::TerminateOpenGL();
-
-	int i = 0;
+	Graphics::TerminateOpenGL();
 }

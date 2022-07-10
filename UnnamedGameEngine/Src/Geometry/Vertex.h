@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Shader.h"
-
 #include <vector>
+
+#include "Math/Vector.h"
 
 namespace UEngine
 {
@@ -50,5 +50,22 @@ namespace UEngine
 		const std::vector<VertexElement>& Elements() const;
 
 		unsigned int Stride() const;
+	};
+
+	struct Vertex
+	{
+		Vector3 position;
+
+		Vertex() = default;
+
+		Vertex(const Vector3& position) :
+			position(position)
+		{}
+
+		Vertex(float x, float y, float z) :
+			position(x, y, z)
+		{}
+
+		static const VertexLayout& Layout();
 	};
 }

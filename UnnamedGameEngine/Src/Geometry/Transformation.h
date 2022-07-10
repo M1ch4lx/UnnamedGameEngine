@@ -19,16 +19,9 @@ namespace UEngine
 
 	class Transformable
 	{
-	private:
+	public:
 		Transformation transformation;
 
-	public:
-		Transformable();
-		
 		virtual ~Transformable() = default;
-
-		Transformation& GetTransformation();
-
-		void SetTransformation(const Transformation& transformation);
 	};
 }

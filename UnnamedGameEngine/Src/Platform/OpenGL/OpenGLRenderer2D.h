@@ -1,5 +1,7 @@
 #pragma once
 
+#include "OpenGLCommon.h"
+
 #include "Renderer/Renderer2D.h"
 
 namespace UEngine
@@ -7,10 +9,14 @@ namespace UEngine
 	class OpenGLRenderer2D :public Renderer2D
 	{
 	public:
-		void OnFrameBegin() override;
+		OpenGLRenderer2D(RenderContext* context);
 
-		void OnFrameEnd() override;
+		virtual void BeginFrame() override;
 
-		void Clear() override;
+		virtual void EndFrame() override;
+
+		virtual void Clear() override;
+
+		void Render(const Ref<VertexArray>& vao) override;
 	};
 }

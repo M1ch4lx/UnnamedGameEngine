@@ -22,9 +22,7 @@ namespace UEngine
 
 		void Bind() override;
 
-		void SetData(const float* data, unsigned int dataSize) override;
-
-		void SetLayout(const VertexLayout& layout) override;
+		void SetData(const void* vertecies, unsigned int verteciesCount, const VertexLayout& layout) override;
 
 		const VertexLayout& GetLayout() const override;
 	};
@@ -34,15 +32,15 @@ namespace UEngine
 	private:
 		unsigned int id;
 
+		unsigned int count;
+
 	public:
-		OpenGLIndexBuffer();
+		OpenGLIndexBuffer(unsigned int* indices, unsigned int count);
 
 		~OpenGLIndexBuffer();
 
 		void Bind() const override;
 
 		unsigned int GetCount() const override;
-
-		void SetIndices(unsigned int* indices, unsigned int count) override;
 	};
 }

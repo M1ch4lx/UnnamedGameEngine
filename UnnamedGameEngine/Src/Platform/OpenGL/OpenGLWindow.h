@@ -56,6 +56,6 @@ namespace UEngine
 
 		bool IsOpen() override;
 
-		RenderContext* GetContext() override;
+		RenderContext* Context() override;
 	};
 }

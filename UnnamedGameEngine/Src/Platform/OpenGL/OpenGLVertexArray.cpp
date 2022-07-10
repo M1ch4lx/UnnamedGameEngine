@@ -3,10 +3,14 @@
 
 namespace UEngine
 {
-	OpenGLVertexArray::OpenGLVertexArray() :
-		id(0)
+	OpenGLVertexArray::OpenGLVertexArray(const Ref<VertexBuffer>& vertexBuffer, const Ref<IndexBuffer>& indexBuffer)
 	{
 		glGenVertexArrays(1, &id);
+
+		glBindVertexArray(id);
+
+		SetVertexBuffer(vertexBuffer);
+		SetIndexBuffer(indexBuffer);
 	}
 
 	OpenGLVertexArray::~OpenGLVertexArray()
@@ -16,13 +20,12 @@ namespace UEngine
 
 	void OpenGLVertexArray::SetVertexBuffer(const Ref<VertexBuffer>& buffer)
 	{
-		if (vertexBuffer)
+		if (!buffer)
 		{
 			return;
 		}
-		vertexBuffer = buffer;
 
-		glBindVertexArray(id);
+		vertexBuffer = buffer;
 
 		vertexBuffer->Bind();
 
@@ -42,13 +45,14 @@ namespace UEngine
 
 	void OpenGLVertexArray::SetIndexBuffer(const Ref<IndexBuffer>& buffer)
 	{
-		if (indexBuffer)
+		if (!buffer)
 		{
 			return;
 		}
+
 		indexBuffer = buffer;
 
-		glBindVertexArray(id);
+		buffer->Bind();
 	}
 
 	void OpenGLVertexArray::Bind()

@@ -1,7 +1,8 @@
 #pragma once
 
 #include "GraphicsObject.h"
-#include "Vertex.h"
+
+#include "Geometry/Vertex.h"
 
 namespace UEngine
 {
@@ -10,9 +11,7 @@ namespace UEngine
 	public:
 		virtual void Bind() = 0;
 
-		virtual void SetData(const float* data, unsigned int dataSize) = 0;
-
-		virtual void SetLayout(const VertexLayout& layout) = 0;
+		virtual void SetData(const void* vertecies, unsigned int verteciesCount, const VertexLayout& layout) = 0;
 
 		virtual const VertexLayout& GetLayout() const = 0;
 	};
@@ -23,7 +22,5 @@ namespace UEngine
 		virtual void Bind() const = 0;
 
 		virtual unsigned int GetCount() const = 0;
-
-		virtual void SetIndices(unsigned int* indices, unsigned int count) = 0;
 	};
 }

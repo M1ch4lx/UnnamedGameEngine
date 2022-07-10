@@ -98,6 +98,11 @@ namespace UEngine
 		{
 			return service;
 		}
+
+		TService* Get() const
+		{
+			return service;
+		}
 	};
 }
 

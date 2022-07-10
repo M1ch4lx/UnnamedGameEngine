@@ -27,6 +27,8 @@ namespace UEngine
 
 		const float* operator[](size_t index) const;
 
+		const float* ConstData() const;
+
 		float* Data();
 
 		Matrix4 operator+(const Matrix4& mat) const;

@@ -19,23 +19,19 @@ namespace UEngine
 		glBindBuffer(GL_ARRAY_BUFFER, id);
 	}
 
-	void OpenGLVertexBuffer::SetData(const float* data, unsigned int dataSize)
+	void OpenGLVertexBuffer::SetData(const void* vertecies, unsigned int verteciesCount, const VertexLayout& layout)
 	{
 		glBindBuffer(GL_ARRAY_BUFFER, id);
+		this->layout = layout;
+		auto dataSize = verteciesCount * layout.Stride();
 		if (dataSize > size)
 		{
-			glBufferData(GL_ARRAY_BUFFER, dataSize,
-				reinterpret_cast<const void*>(data), GL_DYNAMIC_DRAW);
+			glBufferData(GL_ARRAY_BUFFER, dataSize, vertecies, GL_DYNAMIC_DRAW);
 
 			size = dataSize;
 			return;
 		}
-		glBufferSubData(GL_ARRAY_BUFFER, 0, dataSize, reinterpret_cast<const void*>(data));
-	}
-
-	void OpenGLVertexBuffer::SetLayout(const VertexLayout& layout)
-	{
-		this->layout = layout;
+		glBufferSubData(GL_ARRAY_BUFFER, 0, dataSize, vertecies);
 	}
 
 	const VertexLayout& OpenGLVertexBuffer::GetLayout() const
@@ -43,29 +39,27 @@ namespace UEngine
 		return layout;
 	}
 
-	OpenGLIndexBuffer::OpenGLIndexBuffer() :
-		id(0)
+	OpenGLIndexBuffer::OpenGLIndexBuffer(unsigned int* indices, unsigned int count) :
+		id(0), count(count)
 	{
+		glGenBuffers(1, &id);
 
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * count, indices, GL_STATIC_DRAW);
 	}
 
 	OpenGLIndexBuffer::~OpenGLIndexBuffer()
 	{
-
+		glDeleteBuffers(1, &id);
 	}
 
 	void OpenGLIndexBuffer::Bind() const
 	{
-
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id);
 	}
 
 	unsigned int OpenGLIndexBuffer::GetCount() const
 	{
-		return 0;
-	}
-
-	void OpenGLIndexBuffer::SetIndices(unsigned int* indices, unsigned int count)
-	{
-
+		return count;
 	}
 }

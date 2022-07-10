@@ -71,4 +71,10 @@ namespace UEngine
 	{
 		return stride;
 	}
+
+	const VertexLayout& Vertex::Layout()
+	{
+		static const VertexLayout layout = { VertexElementType::Float3 };
+		return layout;
+	}
 }

@@ -3,50 +3,45 @@
 
 namespace UEngine
 {
-	Renderer2D::Renderer2D() :
-		camera(nullptr), currentFrameContext(nullptr)
-	{}
-
-	void Renderer2D::BeginFrame(RenderContext* context)
+	void Renderer2D::CreateViewProjectionMatrices()
 	{
-		if (currentFrameContext)
-		{
-			throw std::exception("End current frame first");
-		}
-		currentFrameContext = context;
-
-		context->Bind();
-
-		OnFrameBegin();
+		auto negPos = transformation.position * -1;
+		transformations.view = TranslationMatrix(Vector3(negPos.x, negPos.y, 0.f));
+		
+		auto cameraSize = camera.CalculateSize();
+		transformations.projection = ScaleMatrix(
+			2.f / cameraSize.x, 2.f / cameraSize.y);
 	}
 
-	void Renderer2D::EndFrame()
+	const Matrix4& Renderer2D::GetViewMatrix() const
 	{
-		if (currentFrameContext)
-		{
-			OnFrameEnd();
-
-			currentFrameContext = nullptr;
-		}
+		return transformations.view;
 	}
 
-	void Renderer2D::SetCamera(Camera2D* camera)
+	const Matrix4& Renderer2D::GetProjectionMatrix() const
+	{
+		return transformations.projection;
+	}
+
+	Renderer2D::Renderer2D(RenderContext* context) :
+		context(context)
+	{
+		CreateViewProjectionMatrices();
+	}
+
+	void Renderer2D::SetCamera(const Camera2D& camera)
 	{
 		this->camera = camera;
+		CreateViewProjectionMatrices();
 	}
 
-	void Renderer2D::ClearCamera()
-	{
-		camera = nullptr;
-	}
-
-	Camera2D* Renderer2D::GetCamera()
+	const Camera2D& Renderer2D::GetCamera() const
 	{
 		return camera;
 	}
 
-	RenderContext* Renderer2D::CurrentContext()
+	RenderContext* Renderer2D::GetContext() const
 	{
-		return currentFrameContext;
+		return context;
 	}
 }

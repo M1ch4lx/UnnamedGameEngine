@@ -1,8 +1,6 @@
 #include "Pch.h"
 #include "OpenGLWindow.h"
 
-#include "Core/Factory.h"
-
 namespace UEngine
 {
 	OpenGLWindow* OpenGLWindow::ObtainWindowPtr(GLFWwindow* glfwWindow)
@@ -90,7 +88,7 @@ namespace UEngine
 		return window;
 	}
 
-	RenderContext* OpenGLWindow::GetContext()
+	RenderContext* OpenGLWindow::Context()
 	{
 		return reinterpret_cast<RenderContext*>(&context);
 	}

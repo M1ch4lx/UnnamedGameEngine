@@ -15,14 +15,14 @@ namespace UEngine
 
 		Ref<IndexBuffer> indexBuffer;
 
+		void SetVertexBuffer(const Ref<VertexBuffer>& vertexBuffer);
+
+		void SetIndexBuffer(const Ref<IndexBuffer>& indexBuffer);
+
 	public:
-		OpenGLVertexArray();
+		OpenGLVertexArray(const Ref<VertexBuffer>& vertexBuffer, const Ref<IndexBuffer>& indexBuffer);
 
 		~OpenGLVertexArray();
-
-		void SetVertexBuffer(const Ref<VertexBuffer>& vertexBuffer) override;
-
-		void SetIndexBuffer(const Ref<IndexBuffer>& indexBuffer) override;
 
 		void Bind() override;
 	};
