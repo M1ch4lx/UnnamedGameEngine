@@ -8,6 +8,7 @@
 #include "Components/TransformSystem.h"
 #include "Core/Container.h"
 #include "Core/Signal.h"
+#include "Core/Timer.h"
 
 #include "Platform/Graphics.h"
 
@@ -165,8 +166,21 @@ void Application::Run(int argc, char* argv[])
 	auto cSize = camera.CalculateSize();
 	std::cout << cSize.x << " " << cSize.y << std::endl;
 
+	Transformation model;
+	model.position = Vector2(0.f, 0.f);
+	model.scale = Vector2(1.f, 1.f);
+	model.rotation = 30.f;
+
+	auto modelMatrix = model.ToMatrix();
+
+	std::cout << "Model matrix" << std::endl;
+	printMat(modelMatrix);
+
+	shader->SetMatrix4("model", modelMatrix);
 	shader->SetMatrix4("view", renderer->GetViewMatrix());
 	shader->SetMatrix4("projection", renderer->GetProjectionMatrix());
+
+	Timer timer;
 
 	while (window->IsOpen())
 	{

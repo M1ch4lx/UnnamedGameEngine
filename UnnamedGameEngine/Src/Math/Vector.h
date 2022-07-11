@@ -110,4 +110,16 @@ namespace UEngine
 	Vector3& Vector3View(float* data);
 
 	Vector4& Vector4View(float* data);
+
+	Vector2 Vector(float x, float y);
+
+	Vector3 Vector(float x, float y, float z);
+
+	Vector3 Vector(const Vector2& vec2, float z);
+
+	Vector4 Vector(float x, float y, float z, float w);
+
+	Vector4 Vector(const Vector3& vec3, float w);
+
+	Vector4 Vector(const Vector2& vec2, float z, float w);
 }

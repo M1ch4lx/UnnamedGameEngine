@@ -37,4 +37,15 @@ namespace UEngine
 		mat[2][2] = kz;
 		return mat;
 	}
+
+	Matrix4 ScaleMatrix(const Vector3& scale)
+	{
+		return ScaleMatrix(scale.x, scale.y, scale.z);
+	}
+
+	Matrix4 ModelMatrix(const Vector3& translation, const Vector3& scale, float angle)
+	{
+		return TranslationMatrix(translation) *
+			(RotationMatrixAroundZ(angle) * ScaleMatrix(scale));
+	}
 }

@@ -195,4 +195,34 @@ namespace UEngine
 	{
 		return *reinterpret_cast<Vector4*>(data);
 	}
+
+	Vector2 Vector(float x, float y)
+	{
+		return Vector2(x, y);
+	}
+
+	Vector3 Vector(float x, float y, float z)
+	{
+		return Vector3(x, y, z);
+	}
+
+	Vector3 Vector(const Vector2& vec2, float z)
+	{
+		return Vector3(vec2.x, vec2.y, z);
+	}
+
+	Vector4 Vector(float x, float y, float z, float w)
+	{
+		return Vector4(x, y, z, w);
+	}
+
+	Vector4 Vector(const Vector3& vec3, float w)
+	{
+		return Vector4(vec3.x, vec3.y, vec3.z, w);
+	}
+
+	Vector4 Vector(const Vector2& vec2, float z, float w)
+	{
+		return Vector4(vec2.x, vec2.y, z, w);
+	}
 }
