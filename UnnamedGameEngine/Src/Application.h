@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Core/Entity.h"
-
 class Application
 {
 public:

@@ -9,6 +9,7 @@
 #include "Core/Container.h"
 #include "Core/Signal.h"
 #include "Core/Timer.h"
+#include "Core/Entity.h"
 
 #include "Platform/Graphics.h"
 
@@ -106,6 +107,7 @@ void Application::Run(int argc, char* argv[])
 	};
 
 	Graphics::InitializeOpenGL();
+
 	auto factory = Graphics::Factory();
 	
 	auto window = factory->CreateWindow();
@@ -113,14 +115,16 @@ void Application::Run(int argc, char* argv[])
 
 	window->Open({"Atron", 960, 540});
 
+	Graphics::InitializeImGui(window);
+
 	auto context = window->Context();
 
-	context->Bind();
+	bool applicationRunning = true;
 
 	window->ConnectSignal<WindowCloseSignal>([&](WindowCloseSignal& signal)
 		{
 			std::cout << "Closing window" << std::endl;
-			window->Destroy();
+			applicationRunning = false;
 		});
 
 	window->ConnectSignal<WindowResizeSignal>([&](WindowResizeSignal& signal)
@@ -182,14 +186,61 @@ void Application::Run(int argc, char* argv[])
 
 	Timer timer;
 
-	while (window->IsOpen())
+	Vector4 color;
+
+	while (applicationRunning)
 	{
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+		glClear(GL_COLOR_BUFFER_BIT);
+
+		ImGui_ImplOpenGL3_NewFrame();
+		ImGui_ImplGlfw_NewFrame();
+		ImGui::NewFrame();
+
+		// Create a window called "My First Tool", with a menu bar.
+		ImGui::Begin("My First Tool");
+		if (ImGui::BeginMenuBar())
+		{
+			if (ImGui::BeginMenu("File"))
+			{
+				if (ImGui::MenuItem("Open..", "Ctrl+O")) { /* Do stuff */ }
+				if (ImGui::MenuItem("Save", "Ctrl+S")) { /* Do stuff */ }
+				if (ImGui::MenuItem("Close", "Ctrl+W")) {  }
+				ImGui::EndMenu();
+			}
+			ImGui::EndMenuBar();
+		}
+
+		// Edit a color (stored as ~4 floats)
+		ImGui::ColorEdit4("Color", (float*)&color);
+
+		// Plot some values
+		const float my_values[] = { 0.2f, 0.1f, 1.0f, 0.5f, 0.9f, 2.2f };
+		ImGui::PlotLines("Frame Times", my_values, IM_ARRAYSIZE(my_values));
+
+		// Display contents in a scrolling region
+		ImGui::TextColored(ImVec4(1, 1, 0, 1), "Important Stuff");
+		ImGui::BeginChild("Scrolling");
+		for (int n = 0; n < 50; n++)
+			ImGui::Text("%04d: Some text", n);
+		ImGui::EndChild();
+		ImGui::End();
+
+		ImGui::EndFrame();
+		ImGui::Render();
+		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 		context->SwapBuffers();
 
 		window->ProcessEvents();
+
+		timer.Wait(16);
 	}
+
+	Graphics::TerminateImGui();
+
+	window->Destroy();
 
 	Graphics::TerminateOpenGL();
 }

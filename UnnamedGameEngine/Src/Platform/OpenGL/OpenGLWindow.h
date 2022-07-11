@@ -2,8 +2,6 @@
 
 #include "OpenGLCommon.h"
 
-#include "GLFW/glfw3.h"
-
 #include "Renderer/RenderContext.h"
 
 #include "Core/Window.h"
@@ -32,6 +30,7 @@ namespace UEngine
 
 	class OpenGLWindow :public Window
 	{
+		friend class Graphics;
 	private:
 		GLFWwindow* window;
 

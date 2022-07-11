@@ -72,3 +72,39 @@ project "GLFW"
 	filter "configurations:Release"
 		runtime "Release"
 		optimize "on"
+
+project "ImGui"
+	location "imgui"
+	kind "StaticLib"
+	language "C++"
+	cppdialect "C++20"
+
+	targetdir ("%{wks.location}/bin/" .. outputdir .. "/%{prj.name}")
+	objdir ("%{wks.location}/bin-int/" .. outputdir .. "/%{prj.name}")
+
+	includedirs
+    {
+        "imgui",
+		"glfw/include"
+    }
+
+	files
+	{
+		"%{prj.location}/imconfig.h",
+		"%{prj.location}/imgui.h",
+		"%{prj.location}/imgui.cpp",
+		"%{prj.location}/imgui_draw.cpp",
+		"%{prj.location}/imgui_internal.h",
+		"%{prj.location}/imgui_widgets.cpp",
+		"%{prj.location}/imstb_rectpack.h",
+		"%{prj.location}/imstb_textedit.h",
+		"%{prj.location}/imstb_truetype.h",
+		"%{prj.location}/imgui_tables.cpp",
+
+		-- Backends
+		"%{prj.location}/backends/imgui_impl_glfw.h",
+		"%{prj.location}/backends/imgui_impl_glfw.cpp",
+
+		"%{prj.location}/backends/imgui_impl_opengl3.h",
+		"%{prj.location}/backends/imgui_impl_opengl3.cpp"
+	}

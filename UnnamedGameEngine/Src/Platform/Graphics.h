@@ -23,6 +23,10 @@ namespace UEngine
 
 		static void TerminateOpenGL();
 
+		static void InitializeImGui(const Ref<Window>& window);
+
+		static void TerminateImGui();
+
 		static GraphicsFactory* Factory();
 	};
 }

@@ -25,24 +25,27 @@ project "UnnamedGameEngine"
         "Src",
         "Vendor",
         "Vendor/glfw/include",
-        "Vendor/glad"
+        "Vendor/glad",
+        "Vendor/imgui"
     }
 
     dependson
     {
-        "GLFW"
+        "GLFW",
+        "ImGui"
     }
 
     links
     {
         "GLFW",
+        "ImGui",
         "opengl32.lib"
     }
 
-    libdirs
-    {
-        "Vendor/mono"
-    }
+    --libdirs
+    --{
+    --    "Vendor/mono"
+    --}
 
     defines
     {

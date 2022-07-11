@@ -67,6 +67,9 @@ namespace UEngine
 
 				window->EmitSignal(signal);
 			});
+
+		context.Bind();
+		gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 	}
 
 	void OpenGLWindow::Destroy()
@@ -104,8 +107,6 @@ namespace UEngine
 		if (currentContext != this && *window)
 		{
 			glfwMakeContextCurrent(*window);
-
-			gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 
 			currentContext = this;
 		}
