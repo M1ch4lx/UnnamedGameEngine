@@ -9,7 +9,7 @@ namespace UEngine
 		return 3.14159265358979323846f;
 	}
 
-	constexpr float DegreesToRadians(float degrees)
+	constexpr float Radians(float degrees)
 	{
 		return (degrees / 180.f) * Pi();
 	}

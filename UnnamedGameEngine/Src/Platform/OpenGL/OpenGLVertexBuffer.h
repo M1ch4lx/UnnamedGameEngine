@@ -10,8 +10,8 @@ namespace UEngine
 	{
 	private:
 		unsigned int id;
-		
-		unsigned int size;
+
+		unsigned int count;
 
 		VertexLayout layout;
 
@@ -22,9 +22,11 @@ namespace UEngine
 
 		void Bind() override;
 
-		void SetData(const void* vertecies, unsigned int verteciesCount, const VertexLayout& layout) override;
+		void SetData(const void* vertecies, unsigned int verticesCount, const VertexLayout& layout) override;
 
 		const VertexLayout& GetLayout() const override;
+
+		virtual unsigned int GetCount() const override;
 	};
 
 	class OpenGLIndexBuffer :public IndexBuffer

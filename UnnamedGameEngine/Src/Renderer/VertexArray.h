@@ -10,5 +10,9 @@ namespace UEngine
 	{
 	public:
 		virtual void Bind() = 0;
+
+		virtual const Ref<VertexBuffer>& GetVertexBuffer() const = 0;
+
+		virtual const Ref<IndexBuffer>& GetIndexBuffer() const = 0;
 	};
 }

@@ -27,7 +27,7 @@ namespace UEngine
 	public:
 		void SetTransformation(const Transformation& transformation);
 
-		const Transformation& GetTransformation() const;
+		Transformation& GetTransformation();
 
 		virtual ~Transformable() = default;
 	};

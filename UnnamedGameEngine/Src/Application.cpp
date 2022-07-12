@@ -164,72 +164,72 @@ void Application::Run(int argc, char* argv[])
 	Camera2D camera;
 	renderer->SetCamera(camera);
 
-	printMat(renderer->GetViewMatrix());
-	printMat(renderer->GetProjectionMatrix());
-
-	auto cSize = camera.CalculateSize();
-	std::cout << cSize.x << " " << cSize.y << std::endl;
-
 	Transformation model;
 	model.position = Vector2(0.f, 0.f);
 	model.scale = Vector2(1.f, 1.f);
-	model.rotation = 30.f;
 
-	auto modelMatrix = model.ToMatrix();
+	auto GetViewMatrix = [&]()
+	{
+		return Math::View2D(camera.GetTransformation().position,
+			Radians(camera.GetTransformation().rotation));
+	};
 
-	std::cout << "Model matrix" << std::endl;
-	printMat(modelMatrix);
-
-	shader->SetMatrix4("model", modelMatrix);
-	shader->SetMatrix4("view", renderer->GetViewMatrix());
-	shader->SetMatrix4("projection", renderer->GetProjectionMatrix());
+	auto GetProjectionMatrix = [&]()
+	{
+		return Math::Orthographic2D(camera.CalculateSize(), 0.f, 100.f);
+	};
 
 	Timer timer;
 
-	Vector4 color;
+	float cameraSize = camera.GetSize();
 
-	while (applicationRunning)
+	auto renderImGui = [&]()
 	{
-		//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
-		glClear(GL_COLOR_BUFFER_BIT);
-
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 
-		// Create a window called "My First Tool", with a menu bar.
-		ImGui::Begin("My First Tool");
-		if (ImGui::BeginMenuBar())
-		{
-			if (ImGui::BeginMenu("File"))
-			{
-				if (ImGui::MenuItem("Open..", "Ctrl+O")) { /* Do stuff */ }
-				if (ImGui::MenuItem("Save", "Ctrl+S")) { /* Do stuff */ }
-				if (ImGui::MenuItem("Close", "Ctrl+W")) {  }
-				ImGui::EndMenu();
-			}
-			ImGui::EndMenuBar();
-		}
+		ImGui::Begin("Quad options");
 
-		// Edit a color (stored as ~4 floats)
-		ImGui::ColorEdit4("Color", (float*)&color);
+		ImGui::SliderFloat("rotation", &model.rotation, 0.f, 360.f);
 
-		// Plot some values
-		const float my_values[] = { 0.2f, 0.1f, 1.0f, 0.5f, 0.9f, 2.2f };
-		ImGui::PlotLines("Frame Times", my_values, IM_ARRAYSIZE(my_values));
+		ImGui::SliderFloat2("position", model.position.Data(), -200.f, 200.f);
 
-		// Display contents in a scrolling region
-		ImGui::TextColored(ImVec4(1, 1, 0, 1), "Important Stuff");
-		ImGui::BeginChild("Scrolling");
-		for (int n = 0; n < 50; n++)
-			ImGui::Text("%04d: Some text", n);
-		ImGui::EndChild();
+		ImGui::SliderFloat2("scale", model.scale.Data(), 0.f, 10.f);
+
+		ImGui::End();
+
+		ImGui::Begin("Camera options");
+
+		ImGui::SliderFloat("rotation", &camera.GetTransformation().rotation, 0.f, 360.f);
+
+		ImGui::SliderFloat2("position", camera.GetTransformation().position.Data(), -200.f, 200.f);
+
+		ImGui::SliderFloat("size", &cameraSize, 0.f, 10.f);
+
 		ImGui::End();
 
 		ImGui::EndFrame();
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+	};
+
+	while (applicationRunning)
+	{
+		camera.SetSize(cameraSize);
+
+		shader->SetMatrix4("model", model.ToMatrix());
+		shader->SetMatrix4("view", GetViewMatrix());
+		shader->SetMatrix4("projection", GetProjectionMatrix());
+
+		renderer->ClearScreen();
+
+		// Scene
+		renderer->Render(vao);
+
+		// GUI
+		//glClear(GL_DEPTH_BUFFER_BIT);
+		renderImGui();
 
 		context->SwapBuffers();
 

@@ -4,7 +4,7 @@
 namespace UEngine
 {
 	OpenGLVertexBuffer::OpenGLVertexBuffer() :
-		id(0), size(0)
+		id(0), count(0)
 	{
 		glGenBuffers(1, &id);
 	}
@@ -19,16 +19,17 @@ namespace UEngine
 		glBindBuffer(GL_ARRAY_BUFFER, id);
 	}
 
-	void OpenGLVertexBuffer::SetData(const void* vertecies, unsigned int verteciesCount, const VertexLayout& layout)
+	void OpenGLVertexBuffer::SetData(const void* vertecies, unsigned int verticesCount, const VertexLayout& layout)
 	{
 		glBindBuffer(GL_ARRAY_BUFFER, id);
 		this->layout = layout;
-		auto dataSize = verteciesCount * layout.Stride();
-		if (dataSize > size)
+		auto dataSize = verticesCount * layout.Stride();
+		if (verticesCount > count)
 		{
 			glBufferData(GL_ARRAY_BUFFER, dataSize, vertecies, GL_DYNAMIC_DRAW);
 
-			size = dataSize;
+			count = verticesCount;
+
 			return;
 		}
 		glBufferSubData(GL_ARRAY_BUFFER, 0, dataSize, vertecies);
@@ -37,6 +38,11 @@ namespace UEngine
 	const VertexLayout& OpenGLVertexBuffer::GetLayout() const
 	{
 		return layout;
+	}
+
+	unsigned int OpenGLVertexBuffer::GetCount() const
+	{
+		return count;
 	}
 
 	OpenGLIndexBuffer::OpenGLIndexBuffer(unsigned int* indices, unsigned int count) :

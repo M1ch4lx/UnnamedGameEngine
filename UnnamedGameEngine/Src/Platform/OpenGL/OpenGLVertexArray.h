@@ -25,5 +25,9 @@ namespace UEngine
 		~OpenGLVertexArray();
 
 		void Bind() override;
+
+		virtual const Ref<VertexBuffer>& GetVertexBuffer() const override;
+
+		virtual const Ref<IndexBuffer>& GetIndexBuffer() const override;
 	};
 }

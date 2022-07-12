@@ -14,42 +14,21 @@ namespace UEngine
 {
 	class Renderer2D :public Transformable, public GraphicsObject
 	{
-	private:
-		RenderContext* context;
-
-		Camera2D camera;
-
-		// TODO: change this later to smth more organised
-		// create rendering pipeline class or smth
-		struct VP
-		{
-			Matrix4 view;
-			Matrix4 projection;
-
-		} transformations;
-
-		void CreateViewProjectionMatrices();
-
-	public:
-		const Matrix4& GetViewMatrix() const;
-
-		const Matrix4& GetProjectionMatrix() const;
-
 	public:
 		virtual void BeginFrame() = 0;
 
 		virtual void EndFrame() = 0;
 
-		virtual void Clear() = 0;
+		virtual void ClearScreen() = 0;
+
+		virtual void ClearDepth() = 0;
 
 		virtual void Render(const Ref<VertexArray>& vao) = 0;
 
-		Renderer2D(RenderContext* context);
+		virtual void SetCamera(const Camera2D& camera) = 0;
 
-		void SetCamera(const Camera2D& camera);
+		virtual const Camera2D& GetCamera() const = 0;
 
-		const Camera2D& GetCamera() const;
-
-		RenderContext* GetContext() const;
+		virtual RenderContext* GetContext() const = 0;
 	};
 }

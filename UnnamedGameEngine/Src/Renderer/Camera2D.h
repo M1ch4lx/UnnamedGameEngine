@@ -36,8 +36,6 @@ namespace UEngine
 
 		Viewport viewport;
 
-		Vector2 ratio;
-
 		float size;
 
 	public:

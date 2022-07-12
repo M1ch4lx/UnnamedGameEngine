@@ -59,4 +59,14 @@ namespace UEngine
 	{
 		glBindVertexArray(id);
 	}
+
+	const Ref<VertexBuffer>& OpenGLVertexArray::GetVertexBuffer() const
+	{
+		return vertexBuffer;
+	}
+
+	const Ref<IndexBuffer>& OpenGLVertexArray::GetIndexBuffer() const
+	{
+		return indexBuffer;
+	}
 }

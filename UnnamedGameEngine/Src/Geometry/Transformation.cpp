@@ -8,16 +8,16 @@ namespace UEngine
 		this->transformation = transformation;
 	}
 
-	const Transformation& Transformable::GetTransformation() const
+	Transformation& Transformable::GetTransformation()
 	{
 		return transformation;
 	}
 
 	Matrix4 Transformation::ToMatrix() const
 	{
-		return ModelMatrix(
+		return Math::Model(
 			Vector(position, 0.f),
 			Vector(scale, 1.f),
-			DegreesToRadians(rotation));
+			Radians(rotation));
 	}
 }

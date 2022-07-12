@@ -11,7 +11,9 @@ namespace UEngine
 	public:
 		virtual void Bind() = 0;
 
-		virtual void SetData(const void* vertecies, unsigned int verteciesCount, const VertexLayout& layout) = 0;
+		virtual void SetData(const void* vertecies, unsigned int verticesCount, const VertexLayout& layout) = 0;
+
+		virtual unsigned int GetCount() const = 0;
 
 		virtual const VertexLayout& GetLayout() const = 0;
 	};

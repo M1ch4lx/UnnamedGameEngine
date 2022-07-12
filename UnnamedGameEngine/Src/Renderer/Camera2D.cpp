@@ -4,8 +4,10 @@
 namespace UEngine
 {
 	Camera2D::Camera2D() :
-		ratio(16.f, 9.f), size(6.f)
-	{}
+		size(6.f)
+	{
+		transformation.scale = Vector(16.f, 9.f);
+	}
 
 	const Viewport& Camera2D::GetViewport() const
 	{
@@ -19,12 +21,12 @@ namespace UEngine
 
 	void Camera2D::SetRatio(const Vector2& ratio)
 	{
-		this->ratio = ratio;
+		transformation.scale = ratio;
 	}
 
 	const Vector2& Camera2D::GetRatio() const
 	{
-		return ratio;
+		return transformation.scale;
 	}
 
 	void Camera2D::SetSize(float size)
@@ -39,6 +41,6 @@ namespace UEngine
 
 	Vector2 Camera2D::CalculateSize() const
 	{
-		return ratio * (size * SIZE_MULTIPLIER);
+		return transformation.scale * (size * SIZE_MULTIPLIER);
 	}
 }
