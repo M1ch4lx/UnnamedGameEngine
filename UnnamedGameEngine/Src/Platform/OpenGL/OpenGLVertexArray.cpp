@@ -34,8 +34,8 @@ namespace UEngine
 
 		for (const auto& element : layout.Elements())
 		{
-			glVertexAttribPointer(attribIndex, element.count, GL_FLOAT,
-				GL_FALSE, element.size, (const void*)element.offset);
+			glVertexAttribPointer(attribIndex, element.Count, GL_FLOAT,
+				GL_FALSE, element.Size, (const void*)element.Offset);
 
 			glEnableVertexAttribArray(attribIndex);
 

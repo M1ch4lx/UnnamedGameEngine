@@ -2,8 +2,6 @@
 
 #include "Common.h"
 
-#include "Core.h"
-
 namespace UEngine
 {
 	class IService

@@ -11,7 +11,18 @@ namespace UEngine
 {
 	class GraphicsFactory
 	{
+		friend class Graphics;
+	private:
+		static GraphicsFactory* instance;
+
 	public:
+		virtual ~GraphicsFactory() = default;
+
+		static GraphicsFactory* Get()
+		{
+			return instance;
+		}
+
 		virtual Ref<Renderer2D> CreateRenderer2D(RenderContext* context) = 0;
 
 		virtual Ref<Window> CreateWindow() = 0;

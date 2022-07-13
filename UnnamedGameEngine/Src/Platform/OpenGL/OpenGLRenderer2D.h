@@ -4,6 +4,8 @@
 
 #include "Renderer/Renderer2D.h"
 
+#include "Renderer/GraphicsFactory.h"
+
 namespace UEngine
 {
 	class OpenGLRenderer2D :public Renderer2D
@@ -11,25 +13,32 @@ namespace UEngine
 	private:
 		RenderContext* context;
 
-		Camera2D camera;
+		Renderer2DShaders shaders;
+		
+		// ViewProjection matrix
+		Matrix4 viewProjectionMatrix;
+
+		// Rectangle
+		Ref<VertexArray> rectangleVao;
+		void InitializeRectangleVao();
 
 	public:
 		OpenGLRenderer2D(RenderContext* context);
 
-		virtual void BeginFrame() override;
+		void ClearScreen() override;
 
-		virtual void EndFrame() override;
+		void ClearDepth() override;
 
-		virtual void ClearScreen() override;
+		RenderContext* GetContext() const override;
 
-		virtual void ClearDepth() override;
+		Renderer2DShaders& ShadersConfiguration() override;
 
-		virtual void Render(const Ref<VertexArray>& vao) override;
+		void BeginScene(const OrthographicCamera2D& camera) override;
 
-		virtual void SetCamera(const Camera2D& camera) override;
+		void EndScene() override;
 
-		virtual const Camera2D& GetCamera() const override;
+		void Display() override;
 
-		virtual RenderContext* GetContext() const override;
+		void RenderRectangle(const Transformation& transform, const Color4& color) override;
 	};
 }

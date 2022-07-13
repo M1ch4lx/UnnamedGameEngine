@@ -28,14 +28,18 @@ namespace UEngine
 
 		void Bind() override;
 
-		void SetFloat(const std::string& name, const float val) override;
+		void SetUniform(const std::string& name, const float val) override;
 
-		void SetFloat2(const std::string& name, const Vector2& val) override;
+		void SetUniform(const std::string& name, const Vector2& val) override;
 
-		void SetFloat3(const std::string& name, const Vector3& val) override;
+		void SetUniform(const std::string& name, const Vector3& val) override;
 
-		void SetFloat4(const std::string& name, const Vector4& val) override;
+		void SetUniform(const std::string& name, const Vector4& val) override;
 
-		void SetMatrix4(const std::string& name, const Matrix4& matrix) override;
+		void SetUniform(const std::string& name, const Color4& val) override;
+
+		void SetUniform(const std::string& name, const Color3& val) override;
+
+		void SetUniform(const std::string& name, const Matrix4& matrix) override;
 	};
 }

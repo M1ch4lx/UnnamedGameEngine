@@ -1,9 +1,6 @@
 #pragma once
 
-#include "Core/Common.h"
-
 #include "Math/Math.h"
-
 #include "Geometry/Transformation.h"
 
 namespace UEngine
@@ -29,30 +26,25 @@ namespace UEngine
 		}
 	};
 
-	class Camera2D :public Transformable
+	class Camera :public Transformable
 	{
-	private:
-		static constexpr float SIZE_MULTIPLIER = 10.f;
-
-		Viewport viewport;
-
-		float size;
-
 	public:
-		Camera2D();
+		virtual const Viewport& GetViewport() const = 0;
 
-		const Viewport& GetViewport() const;
+		virtual void SetViewport(const Viewport& viewport) = 0;
 
-		void SetViewport(const Viewport& viewport);
+		virtual void SetRatio(const Vector2& ratio) = 0;
 
-		void SetRatio(const Vector2& ratio);
+		virtual const Vector2& GetRatio() const = 0;
 
-		const Vector2& GetRatio() const;
+		virtual void SetSize(float size) = 0;
 
-		void SetSize(float size);
+		virtual float GetSize() const = 0;
 
-		float GetSize() const;
+		virtual Vector2 GetDimensions() const = 0;
 
-		Vector2 CalculateSize() const;
+		virtual Matrix4 GetViewMatrix() const = 0;
+
+		virtual Matrix4 GetProjectionMatrix() const = 0;
 	};
 }

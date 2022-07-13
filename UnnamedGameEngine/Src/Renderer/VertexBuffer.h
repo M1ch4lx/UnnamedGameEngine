@@ -1,12 +1,12 @@
 #pragma once
 
-#include "GraphicsObject.h"
+#include "Core/FactoryObject.h"
 
 #include "Geometry/Vertex.h"
 
 namespace UEngine
 {
-	class VertexBuffer :public GraphicsObject
+	class VertexBuffer :public FactoryObject
 	{
 	public:
 		virtual void Bind() = 0;
@@ -18,7 +18,7 @@ namespace UEngine
 		virtual const VertexLayout& GetLayout() const = 0;
 	};
 
-	class IndexBuffer :public GraphicsObject
+	class IndexBuffer :public FactoryObject
 	{
 	public:
 		virtual void Bind() const = 0;

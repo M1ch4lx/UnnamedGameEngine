@@ -6,16 +6,17 @@ namespace UEngine
 {
 	struct Transformation
 	{
-		Vector2 position;
+		Vector3 Position;
 
-		Vector2 scale;
+		Vector3 Scale;
 
-		float rotation;
+		Vector3 Rotation;
 
 		Transformation() :
-			scale(1.f, 1.f), rotation(0.f)
+			Scale(1.f, 1.f, 1.f)
 		{}
 
+		// For now ignores 3D components
 		Matrix4 ToMatrix() const;
 	};
 

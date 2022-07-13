@@ -111,9 +111,10 @@ void Application::Run(int argc, char* argv[])
 	auto factory = Graphics::Factory();
 	
 	auto window = factory->CreateWindow();
-	auto renderer = factory->CreateRenderer2D(window->Context());
-
+	
 	window->Open({"Atron", 960, 540});
+
+	auto renderer = factory->CreateRenderer2D(window->Context());
 
 	Graphics::InitializeImGui(window);
 
@@ -132,52 +133,18 @@ void Application::Run(int argc, char* argv[])
 			return;
 		});
 
-	auto shader = factory->CreateShader(
-		ShaderSource("Assets/Shaders/VertexShader.glsl"),
-		ShaderSource("Assets/Shaders/FragmentShader.glsl")
+	auto flatColorShader = factory->CreateShader(
+		ShaderSource("Assets/Shaders/BasicVertex.glsl"),
+		ShaderSource("Assets/Shaders/FlatColor.glsl")
 	);
 
-	Vertex vertices[] = {
-		Vertex(50.f,  50.f, 0.0f),   // top right
-		Vertex(50.f, -50.f, 0.0f),   // bottom right
-		Vertex(-50.f, -50.f, 0.0f),  // bottom left
-		Vertex(-50.f,  50.f, 0.0f)   // top left 
-	};
+	renderer->ShadersConfiguration().FlatColor = flatColorShader;
 
-	const auto& layout = Vertex::Layout();
-
-	auto vbo = factory->CreateVertexBuffer();
-	vbo->SetData(vertices, 4, layout);
-
-	unsigned int indices[] = {
-		0, 1, 3,   // first triangle
-		1, 2, 3    // second triangle
-	};
-
-	auto ibo = factory->CreateIndexBuffer(indices, 6);
-
-	auto vao = factory->CreateVertexArray(vbo, ibo);
-	
-	shader->Bind();
-	vao->Bind();
-
-	Camera2D camera;
-	renderer->SetCamera(camera);
+	OrthographicCamera2D camera;
 
 	Transformation model;
-	model.position = Vector2(0.f, 0.f);
-	model.scale = Vector2(1.f, 1.f);
-
-	auto GetViewMatrix = [&]()
-	{
-		return Math::View2D(camera.GetTransformation().position,
-			Radians(camera.GetTransformation().rotation));
-	};
-
-	auto GetProjectionMatrix = [&]()
-	{
-		return Math::Orthographic2D(camera.CalculateSize(), 0.f, 100.f);
-	};
+	model.Position = Vector3(0.f, 0.f, 0.f);
+	model.Scale = Vector3(1.f, 1.f, 1.f);
 
 	Timer timer;
 
@@ -191,19 +158,19 @@ void Application::Run(int argc, char* argv[])
 
 		ImGui::Begin("Quad options");
 
-		ImGui::SliderFloat("rotation", &model.rotation, 0.f, 360.f);
+		ImGui::SliderFloat("rotation", &model.Rotation.z, 0.f, 360.f);
 
-		ImGui::SliderFloat2("position", model.position.Data(), -200.f, 200.f);
+		ImGui::SliderFloat2("position", model.Position.Data(), -200.f, 200.f);
 
-		ImGui::SliderFloat2("scale", model.scale.Data(), 0.f, 10.f);
+		ImGui::SliderFloat2("scale", model.Scale.Data(), 0.f, 10.f);
 
 		ImGui::End();
 
 		ImGui::Begin("Camera options");
 
-		ImGui::SliderFloat("rotation", &camera.GetTransformation().rotation, 0.f, 360.f);
+		ImGui::SliderFloat("rotation", &camera.GetTransformation().Rotation.z, 0.f, 360.f);
 
-		ImGui::SliderFloat2("position", camera.GetTransformation().position.Data(), -200.f, 200.f);
+		ImGui::SliderFloat2("position", camera.GetTransformation().Position.Data(), -200.f, 200.f);
 
 		ImGui::SliderFloat("size", &cameraSize, 0.f, 10.f);
 
@@ -218,20 +185,20 @@ void Application::Run(int argc, char* argv[])
 	{
 		camera.SetSize(cameraSize);
 
-		shader->SetMatrix4("model", model.ToMatrix());
-		shader->SetMatrix4("view", GetViewMatrix());
-		shader->SetMatrix4("projection", GetProjectionMatrix());
-
 		renderer->ClearScreen();
 
-		// Scene
-		renderer->Render(vao);
+		renderer->BeginScene(camera);
 
-		// GUI
+		// Render scene
+		renderer->RenderRectangle(model, Color4(1.f, 1.f, 1.f, 1.f));
+
+		// Render GUI
 		//glClear(GL_DEPTH_BUFFER_BIT);
 		renderImGui();
 
-		context->SwapBuffers();
+		renderer->EndScene();
+
+		renderer->Display();
 
 		window->ProcessEvents();
 

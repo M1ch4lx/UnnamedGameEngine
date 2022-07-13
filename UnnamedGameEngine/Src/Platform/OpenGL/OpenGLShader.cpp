@@ -69,27 +69,37 @@ namespace UEngine
 		glUseProgram(program);
 	}
 
-	void OpenGLShader::SetFloat(const std::string& name, const float val)
+	void OpenGLShader::SetUniform(const std::string& name, const float val)
 	{
 		glUniform1f(GetUniformLocation(name), val);
 	}
 
-	void OpenGLShader::SetFloat2(const std::string& name, const Vector2& val)
+	void OpenGLShader::SetUniform(const std::string& name, const Vector2& val)
 	{
 		glUniform2f(GetUniformLocation(name), val.x, val.y);
 	}
 
-	void OpenGLShader::SetFloat3(const std::string& name, const Vector3& val)
+	void OpenGLShader::SetUniform(const std::string& name, const Vector3& val)
 	{
 		glUniform3f(GetUniformLocation(name), val.x, val.y, val.z);
 	}
 
-	void OpenGLShader::SetFloat4(const std::string& name, const Vector4& val)
+	void OpenGLShader::SetUniform(const std::string& name, const Vector4& val)
 	{
 		glUniform4f(GetUniformLocation(name), val.x, val.y, val.z, val.w);
 	}
 
-	void OpenGLShader::SetMatrix4(const std::string& name, const Matrix4& matrix)
+	void OpenGLShader::SetUniform(const std::string& name, const Color4& val)
+	{
+		glUniform4f(GetUniformLocation(name), val.r, val.g, val.b, val.a);
+	}
+
+	void OpenGLShader::SetUniform(const std::string& name, const Color3& val)
+	{
+		glUniform3f(GetUniformLocation(name), val.r, val.g, val.b);
+	}
+
+	void OpenGLShader::SetUniform(const std::string& name, const Matrix4& matrix)
 	{
 		glUniformMatrix4fv(GetUniformLocation(name), 1, GL_TRUE, matrix.ConstData());
 	}

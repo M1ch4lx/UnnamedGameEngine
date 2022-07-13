@@ -181,6 +181,21 @@ namespace UEngine
 		return reinterpret_cast<float*>(this);
 	}
 
+	Color3 Color(float r, float g, float b)
+	{
+		return Color3(r, g, b);
+	}
+
+	Color4 Color(float r, float g, float b, float a)
+	{
+		return Color4(r, g, b, a);
+	}
+
+	Color4 Color(const Color3& color3, float a)
+	{
+		return Color4(color3, a);
+	}
+
 	Vector2& Vector2View(float* data)
 	{
 		return *reinterpret_cast<Vector2*>(data);

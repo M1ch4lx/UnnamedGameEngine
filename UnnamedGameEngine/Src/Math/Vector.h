@@ -44,7 +44,7 @@ namespace UEngine
 	public:
 		union
 		{
-			Vector2 vec2;
+			Vector2 xy;
 			struct
 			{
 				float x;
@@ -87,8 +87,9 @@ namespace UEngine
 	public:
 		union
 		{
-			Vector3 vec3;
-			struct {
+			Vector3 xyz;
+			struct
+			{
 				float x;
 				float y;
 				float z;
@@ -104,6 +105,56 @@ namespace UEngine
 
 		float* Data();
 	};
+
+	class Color3
+	{
+	public:
+		float r;
+		float g;
+		float b;
+
+		Color3() :
+			r(0.f), g(0.f), b(0.f)
+		{}
+
+		Color3(float r, float g, float b) :
+			r(r), g(g), b(b)
+		{}
+	};
+
+	class Color4
+	{
+	public:
+		union
+		{
+			Color3 rgb;
+			struct
+			{
+				float r;
+				float g;
+				float b;
+			};
+		};
+		float a;
+
+		Color4() :
+			r(0.f), g(0.f), b(0.f), a(1.f)
+		{}
+
+		Color4(float r, float g, float b, float a) :
+			r(r), g(g), b(b), a(a)
+		{}
+
+		Color4(const Color3& rgb, float a) :
+			rgb(rgb), a(a)
+		{}
+	};
+
+	Color3 Color(float r, float g, float b);
+
+	Color4 Color(float r, float g, float b, float a);
+
+	Color4 Color(const Color3& color3, float a);
 
 	Vector2& Vector2View(float* data);
 

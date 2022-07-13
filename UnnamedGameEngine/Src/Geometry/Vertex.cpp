@@ -56,8 +56,8 @@ namespace UEngine
 		unsigned int offset = 0;
 		for (auto& element : elements)
 		{
-			element.offset = offset;
-			offset += element.size;
+			element.Offset = offset;
+			offset += element.Size;
 		}
 		stride = offset;
 	}

@@ -13,4 +13,19 @@ namespace UEngine
 	{
 		return (degrees / 180.f) * Pi();
 	}
+
+	constexpr float Unit()
+	{
+		return 64.f;
+	}
+
+	constexpr float RealCordinates(float units)
+	{
+		return units * Unit();
+	}
+
+	constexpr float UnitCordinates(float real)
+	{
+		return real / Unit();
+	}
 }

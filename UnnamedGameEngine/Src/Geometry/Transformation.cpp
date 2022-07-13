@@ -15,9 +15,7 @@ namespace UEngine
 
 	Matrix4 Transformation::ToMatrix() const
 	{
-		return Math::Model(
-			Vector(position, 0.f),
-			Vector(scale, 1.f),
-			Radians(rotation));
+		// TODO: handle rotation around other axes
+		return Math::Model(Position, Scale, Radians(Rotation.z));
 	}
 }

@@ -6,7 +6,7 @@
 
 namespace UEngine
 {
-	class VertexArray :public GraphicsObject
+	class VertexArray :public FactoryObject
 	{
 	public:
 		virtual void Bind() = 0;

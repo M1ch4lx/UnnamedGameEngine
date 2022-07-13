@@ -16,8 +16,6 @@ namespace UEngine
 		
 		static GraphicsApi api;
 
-		static GraphicsFactory* graphicsFactory;
-
 	public:
 		static void InitializeOpenGL();
 

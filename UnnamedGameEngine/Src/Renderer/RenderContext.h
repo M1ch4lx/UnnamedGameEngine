@@ -1,10 +1,10 @@
 #pragma once
 
-#include "GraphicsObject.h"
+#include "Core/FactoryObject.h"
 
 namespace UEngine
 {
-	class RenderContext :public GraphicsObject
+	class RenderContext :public FactoryObject
 	{
 	protected:
 		static RenderContext* currentContext;

@@ -1,8 +1,9 @@
 #pragma once
 
-#include "GraphicsObject.h"
+#include "Core/FactoryObject.h"
+
 #include "RenderContext.h"
-#include "Camera2D.h"
+#include "OrthographicCamera.h"
 #include "VertexArray.h"
 #include "Shader.h"
 
@@ -12,23 +13,28 @@
 
 namespace UEngine
 {
-	class Renderer2D :public Transformable, public GraphicsObject
+	struct Renderer2DShaders
+	{
+		Ref<Shader> FlatColor;
+	};
+
+	class Renderer2D :public Transformable, public FactoryObject
 	{
 	public:
-		virtual void BeginFrame() = 0;
+		virtual void BeginScene(const OrthographicCamera2D& camera) = 0;
 
-		virtual void EndFrame() = 0;
+		virtual void EndScene() = 0;
+
+		virtual void Display() = 0;
 
 		virtual void ClearScreen() = 0;
 
 		virtual void ClearDepth() = 0;
 
-		virtual void Render(const Ref<VertexArray>& vao) = 0;
-
-		virtual void SetCamera(const Camera2D& camera) = 0;
-
-		virtual const Camera2D& GetCamera() const = 0;
-
 		virtual RenderContext* GetContext() const = 0;
+
+		virtual Renderer2DShaders& ShadersConfiguration() = 0;
+
+		virtual void RenderRectangle(const Transformation& transform, const Color4& color) = 0;
 	};
 }

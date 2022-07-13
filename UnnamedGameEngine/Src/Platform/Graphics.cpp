@@ -5,7 +5,7 @@ namespace UEngine
 {
 	GraphicsApi Graphics::api = GraphicsApi::None;
 
-	GraphicsFactory* Graphics::graphicsFactory = nullptr;
+	GraphicsFactory* GraphicsFactory::instance = nullptr;
 
 	void Graphics::InitializeOpenGL()
 	{
@@ -20,7 +20,7 @@ namespace UEngine
 			throw std::exception("Cannot initialize GLFW");
 		}
 
-		graphicsFactory = new OpenGLFactory();
+		GraphicsFactory::instance = new OpenGLFactory();
 
 		api = GraphicsApi::OpenGL;
 	}
@@ -32,8 +32,8 @@ namespace UEngine
 			throw std::exception("OpenGL is not initialized");
 		}
 
-		delete graphicsFactory;
-		graphicsFactory = nullptr;
+		delete GraphicsFactory::instance;
+		GraphicsFactory::instance = nullptr;
 
 		glfwTerminate();
 
@@ -74,6 +74,6 @@ namespace UEngine
 
 	GraphicsFactory* Graphics::Factory()
 	{
-		return graphicsFactory;
+		return GraphicsFactory::instance;
 	}
 }

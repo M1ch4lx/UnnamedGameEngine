@@ -17,19 +17,19 @@ namespace UEngine
 
 	struct VertexElement
 	{
-		VertexElementType type;
-		unsigned int size;
-		unsigned int offset;
-		unsigned int count;
+		VertexElementType Type;
+		unsigned int Size;
+		unsigned int Offset;
+		unsigned int Count;
 
 		VertexElement() :
-			type(VertexElementType::None),
-			size(0), offset(0), count(0)
+			Type(VertexElementType::None),
+			Size(0), Offset(0), Count(0)
 		{}
 
 		VertexElement(VertexElementType type) :
-			type(type), size(VertexElementTypeSize(type)),
-			offset(0), count(VertexElementTypeCount(type))
+			Type(type), Size(VertexElementTypeSize(type)),
+			Offset(0), Count(VertexElementTypeCount(type))
 		{}
 	};
 
@@ -54,16 +54,16 @@ namespace UEngine
 
 	struct Vertex
 	{
-		Vector3 position;
+		Vector3 Position;
 
 		Vertex() = default;
 
 		Vertex(const Vector3& position) :
-			position(position)
+			Position(position)
 		{}
 
 		Vertex(float x, float y, float z) :
-			position(x, y, z)
+			Position(x, y, z)
 		{}
 
 		static const VertexLayout& Layout();
