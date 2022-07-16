@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Math/Math.h"
-#include "Geometry/Transformation.h"
 
 namespace UEngine
 {
@@ -26,7 +25,7 @@ namespace UEngine
 		}
 	};
 
-	class Camera :public Transformable
+	class Camera
 	{
 	public:
 		virtual const Viewport& GetViewport() const = 0;

@@ -7,6 +7,7 @@
 #include <stack>
 #include <type_traits>
 #include <memory>
+#include <array>
 
 namespace UEngine
 {

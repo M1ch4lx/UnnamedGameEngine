@@ -32,4 +32,9 @@ namespace UEngine
 	{
 		return Ref<Shader>(new OpenGLShader(vertexSrc, fragmentSrc));
 	}
+
+	Ref<Texture> OpenGLFactory::CreateTexture(const Image& data)
+	{
+		return Ref<Texture>(new OpenGLTexture(data));
+	}
 }

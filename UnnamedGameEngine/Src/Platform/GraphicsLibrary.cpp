@@ -1,13 +1,13 @@
 #include "Pch.h"
-#include "Graphics.h"
+#include "GraphicsLibrary.h"
 
 namespace UEngine
 {
-	GraphicsApi Graphics::api = GraphicsApi::None;
+	GraphicsApi GraphicsLibrary::api = GraphicsApi::None;
 
 	GraphicsFactory* GraphicsFactory::instance = nullptr;
 
-	void Graphics::InitializeOpenGL()
+	void GraphicsLibrary::InitializeOpenGL()
 	{
 		if (api != GraphicsApi::None)
 		{
@@ -25,7 +25,7 @@ namespace UEngine
 		api = GraphicsApi::OpenGL;
 	}
 
-	void Graphics::TerminateOpenGL()
+	void GraphicsLibrary::TerminateOpenGL()
 	{
 		if (api != GraphicsApi::OpenGL)
 		{
@@ -40,27 +40,38 @@ namespace UEngine
 		api = GraphicsApi::None;
 	}
 
-	void Graphics::InitializeImGui(const Ref<Window>& window)
+	void GraphicsLibrary::Initialize(GraphicsApi api)
 	{
-		IMGUI_CHECKVERSION();
-		ImGui::CreateContext();
-		ImGui::StyleColorsDark();
-		
+		Terminate();
+
 		switch (api)
 		{
 		case GraphicsApi::OpenGL:
-			ImGui_ImplGlfw_InitForOpenGL(reinterpret_cast<OpenGLWindow*>(window.get())->window, true);
-			ImGui_ImplOpenGL3_Init("#version 410");
-			break;
-
-		default:
-			TerminateImGui();
-			throw std::exception("Graphics are not initialized");
+			InitializeOpenGL();
 			break;
 		}
 	}
 
-	void Graphics::TerminateImGui()
+	void GraphicsLibrary::Terminate()
+	{
+		switch (api)
+		{
+		case GraphicsApi::OpenGL:
+			TerminateOpenGL();
+			break;
+		}
+	}
+
+	void GraphicsLibrary::InitializeImGui(const Ref<Window>& window)
+	{
+		ImGui::CreateContext();
+		
+		ImGui_ImplOpenGL3_Init();
+		ImGui_ImplGlfw_InitForOpenGL(
+			reinterpret_cast<OpenGLWindow*>(window.get())->window, true);
+	}
+
+	void GraphicsLibrary::TerminateImGui()
 	{
 		switch (api)
 		{
@@ -72,7 +83,7 @@ namespace UEngine
 		ImGui::DestroyContext();
 	}
 
-	GraphicsFactory* Graphics::Factory()
+	GraphicsFactory* GraphicsLibrary::Factory()
 	{
 		return GraphicsFactory::instance;
 	}

@@ -28,6 +28,8 @@ namespace UEngine
 
 		void Bind() override;
 
+		void SetUniform(const std::string& name, const int val) override;
+
 		void SetUniform(const std::string& name, const float val) override;
 
 		void SetUniform(const std::string& name, const Vector2& val) override;

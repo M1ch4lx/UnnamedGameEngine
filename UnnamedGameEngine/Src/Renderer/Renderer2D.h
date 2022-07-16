@@ -3,13 +3,14 @@
 #include "Core/FactoryObject.h"
 
 #include "RenderContext.h"
-#include "OrthographicCamera.h"
 #include "VertexArray.h"
 #include "Shader.h"
 
 #include "Core/Common.h"
 
-#include "Geometry/Transformation.h"
+#include "Geometry/2D/Transformation2D.h"
+
+#include "2D/Camera2D.h"
 
 namespace UEngine
 {
@@ -18,10 +19,10 @@ namespace UEngine
 		Ref<Shader> FlatColor;
 	};
 
-	class Renderer2D :public Transformable, public FactoryObject
+	class Renderer2D :public Transformable2D, public FactoryObject
 	{
 	public:
-		virtual void BeginScene(const OrthographicCamera2D& camera) = 0;
+		virtual void BeginScene(const Camera2D& camera) = 0;
 
 		virtual void EndScene() = 0;
 
@@ -35,6 +36,6 @@ namespace UEngine
 
 		virtual Renderer2DShaders& ShadersConfiguration() = 0;
 
-		virtual void RenderRectangle(const Transformation& transform, const Color4& color) = 0;
+		virtual void RenderRectangle(const Transformation2D& transform, const Color4& color) = 0;
 	};
 }

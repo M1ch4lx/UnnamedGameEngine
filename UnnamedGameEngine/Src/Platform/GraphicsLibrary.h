@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Core/Core.h"
+
 #include "OpenGL/OpenGLFactory.h"
 
 namespace UEngine
@@ -9,10 +11,10 @@ namespace UEngine
 		None, OpenGL
 	};
 
-	class Graphics
+	class GraphicsLibrary
 	{
 	private:
-		Graphics() {};
+		GraphicsLibrary() {};
 		
 		static GraphicsApi api;
 
@@ -20,6 +22,10 @@ namespace UEngine
 		static void InitializeOpenGL();
 
 		static void TerminateOpenGL();
+
+		static void Initialize(GraphicsApi api);
+
+		static void Terminate();
 
 		static void InitializeImGui(const Ref<Window>& window);
 

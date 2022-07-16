@@ -33,6 +33,8 @@ namespace UEngine
 	public:
 		virtual void Bind() = 0;
 
+		virtual void SetUniform(const std::string& name, const int val) = 0;
+
 		virtual void SetUniform(const std::string& name, const float val) = 0;
 
 		virtual void SetUniform(const std::string& name, const Vector2& val) = 0;

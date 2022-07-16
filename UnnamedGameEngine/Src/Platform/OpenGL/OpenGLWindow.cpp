@@ -19,6 +19,11 @@ namespace UEngine
 
 	}
 
+	OpenGLWindow::~OpenGLWindow()
+	{
+		Destroy();
+	}
+
 	const WindowProps& OpenGLWindow::Properties()
 	{
 		return properties;

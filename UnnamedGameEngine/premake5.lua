@@ -15,8 +15,14 @@ project "UnnamedGameEngine"
         "Src/**.cpp",
 
         -- Vendor files:
+
+        -- glad
         "Vendor/glad/**.h",
-        "Vendor/glad/**.cpp"
+        "Vendor/glad/**.cpp",
+
+        -- stb
+        "Vendor/stb/**.h",
+        "Vendor/stb/**.cpp"
     }
 
     includedirs

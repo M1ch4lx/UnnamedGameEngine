@@ -30,7 +30,7 @@ namespace UEngine
 
 	class OpenGLWindow :public Window
 	{
-		friend class Graphics;
+		friend class GraphicsLibrary;
 	private:
 		GLFWwindow* window;
 
@@ -44,6 +44,8 @@ namespace UEngine
 
 	public:
 		OpenGLWindow();
+
+		~OpenGLWindow();
 
 		const WindowProps& Properties() override;
 

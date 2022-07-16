@@ -48,9 +48,16 @@ namespace UEngine
 		}
 	}
 
-	inline int OpenGLShader::GetUniformLocation(const std::string& name)
+	int OpenGLShader::GetUniformLocation(const std::string& name)
 	{
-		return glGetUniformLocation(program, name.c_str());
+		int location = glGetUniformLocation(program, name.c_str());
+
+		if (location == -1)
+		{
+			throw std::exception("Cannot find uniform");
+		}
+
+		return location;
 	}
 
 	OpenGLShader::OpenGLShader(const ShaderSource& vertexSrc, const ShaderSource& fragmentSrc) :
@@ -67,6 +74,11 @@ namespace UEngine
 	void OpenGLShader::Bind()
 	{
 		glUseProgram(program);
+	}
+
+	void OpenGLShader::SetUniform(const std::string& name, const int val)
+	{
+		glUniform1i(GetUniformLocation(name), val);
 	}
 
 	void OpenGLShader::SetUniform(const std::string& name, const float val)

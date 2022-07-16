@@ -4,14 +4,8 @@
 #include <iostream>
 #include <string>
 
-#include "Components/Transform.h"
-#include "Components/TransformSystem.h"
-#include "Core/Container.h"
-#include "Core/Signal.h"
-#include "Core/Timer.h"
-#include "Core/Entity.h"
-
-#include "Platform/Graphics.h"
+#include "Platform/GraphicsLibrary.h"
+#include "Data/Image.h"
 
 using namespace UEngine;
 
@@ -106,17 +100,17 @@ void Application::Run(int argc, char* argv[])
 		std::cout << std::endl;
 	};
 
-	Graphics::InitializeOpenGL();
+	GraphicsLibrary::InitializeOpenGL();
 
-	auto factory = Graphics::Factory();
+	auto factory = GraphicsLibrary::Factory();
 	
 	auto window = factory->CreateWindow();
 	
 	window->Open({"Atron", 960, 540});
 
-	auto renderer = factory->CreateRenderer2D(window->Context());
+	auto renderer2D = factory->CreateRenderer2D(window->Context());
 
-	Graphics::InitializeImGui(window);
+	GraphicsLibrary::InitializeImGui(window);
 
 	auto context = window->Context();
 
@@ -138,13 +132,21 @@ void Application::Run(int argc, char* argv[])
 		ShaderSource("Assets/Shaders/FlatColor.glsl")
 	);
 
-	renderer->ShadersConfiguration().FlatColor = flatColorShader;
+	renderer2D->ShadersConfiguration().FlatColor = flatColorShader;
 
-	OrthographicCamera2D camera;
+	Image image;
+	image.LoadFromFile("Assets/Textures/test.png");
 
-	Transformation model;
-	model.Position = Vector3(0.f, 0.f, 0.f);
-	model.Scale = Vector3(1.f, 1.f, 1.f);
+	
+	// auto texture = factory->CreateTexture(image);
+	// texture->Bind(0);
+	// renderer2D->ShadersConfiguration().FlatColor->SetUniform("Texture", 0);
+
+	Camera2D camera;
+
+	Transformation2D model;
+	model.Position = Vector(0.f, 0.f);
+	model.Scale = Vector(1.f, 1.f);
 
 	Timer timer;
 
@@ -158,7 +160,7 @@ void Application::Run(int argc, char* argv[])
 
 		ImGui::Begin("Quad options");
 
-		ImGui::SliderFloat("rotation", &model.Rotation.z, 0.f, 360.f);
+		ImGui::SliderFloat("rotation", &model.Rotation, 0.f, 360.f);
 
 		ImGui::SliderFloat2("position", model.Position.Data(), -200.f, 200.f);
 
@@ -168,7 +170,7 @@ void Application::Run(int argc, char* argv[])
 
 		ImGui::Begin("Camera options");
 
-		ImGui::SliderFloat("rotation", &camera.GetTransformation().Rotation.z, 0.f, 360.f);
+		ImGui::SliderFloat("rotation", &camera.GetTransformation().Rotation, 0.f, 360.f);
 
 		ImGui::SliderFloat2("position", camera.GetTransformation().Position.Data(), -200.f, 200.f);
 
@@ -185,29 +187,29 @@ void Application::Run(int argc, char* argv[])
 	{
 		camera.SetSize(cameraSize);
 
-		renderer->ClearScreen();
+		renderer2D->ClearScreen();
 
-		renderer->BeginScene(camera);
+		renderer2D->BeginScene(camera);
 
 		// Render scene
-		renderer->RenderRectangle(model, Color4(1.f, 1.f, 1.f, 1.f));
+		renderer2D->RenderRectangle(model, Color4(1.f, 1.f, 1.f, 1.f));
 
 		// Render GUI
 		//glClear(GL_DEPTH_BUFFER_BIT);
 		renderImGui();
 
-		renderer->EndScene();
+		renderer2D->EndScene();
 
-		renderer->Display();
+		renderer2D->Display();
 
 		window->ProcessEvents();
 
 		timer.Wait(16);
 	}
 
-	Graphics::TerminateImGui();
+	GraphicsLibrary::TerminateImGui();
 
 	window->Destroy();
 
-	Graphics::TerminateOpenGL();
+	GraphicsLibrary::TerminateOpenGL();
 }

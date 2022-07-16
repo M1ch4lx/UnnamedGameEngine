@@ -55,7 +55,7 @@ namespace UEngine
 		return shaders;
 	}
 
-	void OpenGLRenderer2D::BeginScene(const OrthographicCamera2D& camera)
+	void OpenGLRenderer2D::BeginScene(const Camera2D& camera)
 	{
 		viewProjectionMatrix = camera.GetProjectionMatrix() * camera.GetViewMatrix();
 	}
@@ -70,7 +70,7 @@ namespace UEngine
 		context->SwapBuffers();
 	}
 
-	void OpenGLRenderer2D::RenderRectangle(const Transformation& transform, const Color4& color)
+	void OpenGLRenderer2D::RenderRectangle(const Transformation2D& transform, const Color4& color)
 	{
 		auto& shader = ShadersConfiguration().FlatColor;
 		auto& vao = rectangleVao;

@@ -33,12 +33,12 @@ namespace UEngine
 
 		Renderer2DShaders& ShadersConfiguration() override;
 
-		void BeginScene(const OrthographicCamera2D& camera) override;
+		void BeginScene(const Camera2D& camera) override;
 
 		void EndScene() override;
 
 		void Display() override;
 
-		void RenderRectangle(const Transformation& transform, const Color4& color) override;
+		void RenderRectangle(const Transformation2D& transform, const Color4& color) override;
 	};
 }

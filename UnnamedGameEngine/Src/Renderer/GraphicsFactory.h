@@ -6,12 +6,13 @@
 #include "VertexArray.h"
 #include "Shader.h"
 #include "Renderer2D.h"
+#include "Texture.h"
 
 namespace UEngine
 {
 	class GraphicsFactory
 	{
-		friend class Graphics;
+		friend class GraphicsLibrary;
 	private:
 		static GraphicsFactory* instance;
 
@@ -34,5 +35,7 @@ namespace UEngine
 		virtual Ref<VertexArray> CreateVertexArray(const Ref<VertexBuffer>& vbo, const Ref<IndexBuffer>& ibo) = 0;
 
 		virtual Ref<Shader> CreateShader(const ShaderSource& vertexSrc, const ShaderSource& fragmentSrc) = 0;
+
+		virtual Ref<Texture> CreateTexture(const Image& data) = 0;
 	};
 }

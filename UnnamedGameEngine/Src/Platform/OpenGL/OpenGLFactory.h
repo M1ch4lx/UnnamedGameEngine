@@ -7,6 +7,7 @@
 #include "OpenGLShader.h"
 #include "OpenGLWindow.h"
 #include "OpenGLRenderer2D.h"
+#include "OpenGLTexture.h"
 
 namespace UEngine
 {
@@ -24,5 +25,7 @@ namespace UEngine
 		Ref<VertexArray> CreateVertexArray(const Ref<VertexBuffer>& vbo, const Ref<IndexBuffer>& ibo) override;
 
 		Ref<Shader> CreateShader(const ShaderSource& vertexSrc, const ShaderSource& fragmentSrc) override;
+
+		Ref<Texture> CreateTexture(const Image& data) override;
 	};
 }
