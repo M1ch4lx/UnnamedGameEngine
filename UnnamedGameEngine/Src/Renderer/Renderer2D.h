@@ -12,13 +12,10 @@
 
 #include "2D/Camera2D.h"
 
+#include "Material.h"
+
 namespace UEngine
 {
-	struct Renderer2DShaders
-	{
-		Ref<Shader> FlatColor;
-	};
-
 	class Renderer2D :public Transformable2D, public FactoryObject
 	{
 	public:
@@ -34,8 +31,10 @@ namespace UEngine
 
 		virtual RenderContext* GetContext() const = 0;
 
-		virtual Renderer2DShaders& ShadersConfiguration() = 0;
+		virtual void SetMaterial(const Ref<MaterialInstance>& materialInstance) = 0;
 
-		virtual void RenderRectangle(const Transformation2D& transform, const Color4& color) = 0;
+		virtual void Render(const Ref<VertexArray>& vao, const Transformation2D& transform) = 0;
+
+		virtual void RenderRectangle(const Transformation2D& transform) = 0;
 	};
 }

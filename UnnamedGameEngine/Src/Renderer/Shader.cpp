@@ -33,4 +33,44 @@ namespace UEngine
 	{
 		return source;
 	}
+
+	void Shader::SetUniform(const std::string& name, const int val)
+	{
+		GetUniform(name)->Upload(val);
+	}
+
+	void Shader::SetUniform(const std::string& name, const float val)
+	{
+		GetUniform(name)->Upload(val);
+	}
+
+	void Shader::SetUniform(const std::string& name, const Vector2& val)
+	{
+		GetUniform(name)->Upload(val);
+	}
+
+	void Shader::SetUniform(const std::string& name, const Vector3& val)
+	{
+		GetUniform(name)->Upload(val);
+	}
+
+	void Shader::SetUniform(const std::string& name, const Vector4& val)
+	{
+		GetUniform(name)->Upload(val);
+	}
+
+	void Shader::SetUniform(const std::string& name, const Color4& val)
+	{
+		GetUniform(name)->Upload(val);
+	}
+
+	void Shader::SetUniform(const std::string& name, const Color3& val)
+	{
+		GetUniform(name)->Upload(val);
+	}
+
+	void Shader::SetUniform(const std::string& name, const Matrix4& matrix)
+	{
+		GetUniform(name)->Upload(matrix);
+	}
 }

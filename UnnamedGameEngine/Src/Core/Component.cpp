@@ -17,14 +17,14 @@ namespace UEngine
 		return typeId;
 	}
 
-	ComponentTypeID ComponentsService::GenerateComponentTypeID()
+	ComponentTypeID ComponentsManager::GenerateComponentTypeID()
 	{
 		static ComponentTypeID id = 0;
 
 		return id++;
 	}
 
-	void ComponentsService::OnDestroy()
+	void ComponentsManager::OnDestroy()
 	{
 		for (auto container : componentsContainers)
 		{
@@ -33,7 +33,7 @@ namespace UEngine
 		componentsContainers.clear();
 	}
 
-	void ComponentsService::UpdateComponents()
+	void ComponentsManager::UpdateComponents()
 	{
 		for (auto container : componentsContainers)
 		{

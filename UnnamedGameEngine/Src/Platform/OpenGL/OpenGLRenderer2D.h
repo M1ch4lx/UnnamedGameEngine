@@ -13,14 +13,10 @@ namespace UEngine
 	private:
 		RenderContext* context;
 
-		Renderer2DShaders shaders;
-		
 		// ViewProjection matrix
 		Matrix4 viewProjectionMatrix;
 
-		// Rectangle
-		Ref<VertexArray> rectangleVao;
-		void InitializeRectangleVao();
+		Ref<MaterialInstance> materialInstance;
 
 	public:
 		OpenGLRenderer2D(RenderContext* context);
@@ -31,14 +27,16 @@ namespace UEngine
 
 		RenderContext* GetContext() const override;
 
-		Renderer2DShaders& ShadersConfiguration() override;
-
 		void BeginScene(const Camera2D& camera) override;
 
 		void EndScene() override;
 
 		void Display() override;
 
-		void RenderRectangle(const Transformation2D& transform, const Color4& color) override;
+		void SetMaterial(const Ref<MaterialInstance>& materialInstance) override;
+
+		void Render(const Ref<VertexArray>& vao, const Transformation2D& transform) override;
+
+		void RenderRectangle(const Transformation2D& transform) override;
 	};
 }

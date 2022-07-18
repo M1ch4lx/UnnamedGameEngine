@@ -7,7 +7,7 @@ namespace UEngine
 		running(false)
 	{}
 
-	void SystemsService::OnDestroy()
+	void SystemsManager::OnDestroy()
 	{
 		for (auto system : systems)
 		{
@@ -17,7 +17,7 @@ namespace UEngine
 		systems.shrink_to_fit();
 	}
 
-	inline void SystemsService::RunSystem(ISystem* system)
+	inline void SystemsManager::RunSystem(ISystem* system)
 	{
 		if (!system->running)
 		{
@@ -26,7 +26,7 @@ namespace UEngine
 		}
 	}
 
-	inline void SystemsService::CloseSystem(ISystem* system)
+	inline void SystemsManager::CloseSystem(ISystem* system)
 	{
 		if (system->running)
 		{
@@ -35,7 +35,7 @@ namespace UEngine
 		}
 	}
 
-	inline void SystemsService::UpdateSystem(ISystem* system)
+	inline void SystemsManager::UpdateSystem(ISystem* system)
 	{
 		if (system->running)
 		{
@@ -43,7 +43,7 @@ namespace UEngine
 		}
 	}
 
-	void SystemsService::RunSystems()
+	void SystemsManager::RunSystems()
 	{
 		for (auto system : systems)
 		{
@@ -51,7 +51,7 @@ namespace UEngine
 		}
 	}
 
-	void SystemsService::CloseSystems()
+	void SystemsManager::CloseSystems()
 	{
 		for (auto system : systems)
 		{
@@ -59,7 +59,7 @@ namespace UEngine
 		}
 	}
 
-	void SystemsService::UpdateSystems()
+	void SystemsManager::UpdateSystems()
 	{
 		for (auto system : systems)
 		{

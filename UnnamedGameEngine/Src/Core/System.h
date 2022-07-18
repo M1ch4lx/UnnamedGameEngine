@@ -8,7 +8,7 @@ namespace UEngine
 {
 	class ISystem
 	{
-		friend class SystemsService;
+		friend class SystemsManager;
 	private:
 		bool running;
 
@@ -24,9 +24,9 @@ namespace UEngine
 		virtual ~ISystem() {};
 	};
 
-	class SystemsService :public IService
+	class SystemsManager :public IService
 	{
-		SERVICE(SystemsService)
+		SERVICE(SystemsManager)
 	private:
 		std::vector<ISystem*> systems;
 
@@ -77,7 +77,7 @@ namespace UEngine
 	{
 		static_assert(std::is_base_of_v<ISystem, TSystem>);
 	private:
-		static Service<SystemsService> systemsService;
+		static Service<SystemsManager> systemsService;
 	
 		TSystem* system;
 
@@ -98,7 +98,7 @@ namespace UEngine
 	};
 
 	template<typename TSystem>
-	Service<SystemsService> System<TSystem>::systemsService;
+	Service<SystemsManager> System<TSystem>::systemsService;
 }
 
-#define SYSTEM(className) friend class SystemsService; private: virtual ~className() {}; className() {};
+#define SYSTEM(className) friend class SystemsManager; private: virtual ~className() {}; className() {};

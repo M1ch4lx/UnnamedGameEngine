@@ -3,7 +3,7 @@
 
 namespace UEngine
 {
-	Service<ComponentsService> Entity::componentsService;
+	Service<ComponentsManager> Entity::componentsService;
 
 	void Entity::AttachComponent(Component* component)
 	{
@@ -89,17 +89,17 @@ namespace UEngine
 		return parent;
 	}
 
-	void EntitiesService::OnDestroy()
+	void EntitiesManager::OnDestroy()
 	{
 		entities.Clear();
 	}
 
-	Entity* EntitiesService::CreateEntity()
+	Entity* EntitiesManager::CreateEntity()
 	{
 		return entities.Create();
 	}
 
-	void EntitiesService::UpdateEntities()
+	void EntitiesManager::UpdateEntities()
 	{
 		for (auto entity : entities.Collection())
 		{
@@ -112,7 +112,7 @@ namespace UEngine
 			});
 	}
 
-	size_t EntitiesService::CountEntities()
+	size_t EntitiesManager::CountEntities()
 	{
 		return entities.Size();
 	}

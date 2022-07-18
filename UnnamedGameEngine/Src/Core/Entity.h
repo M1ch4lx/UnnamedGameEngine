@@ -9,7 +9,7 @@ namespace UEngine
 {
 	class Entity
 	{
-		friend class EntitiesService;
+		friend class EntitiesManager;
 	public:
 		struct Status
 		{
@@ -17,7 +17,7 @@ namespace UEngine
 		};
 
 	private:
-		static Service<ComponentsService> componentsService;
+		static Service<ComponentsManager> componentsService;
 
 		Entity* parent;
 
@@ -88,9 +88,9 @@ namespace UEngine
 		Entity& operator=(Entity&&) = delete;
 	};
 
-	class EntitiesService :public IService
+	class EntitiesManager :public IService
 	{
-		SERVICE(EntitiesService)
+		SERVICE(EntitiesManager)
 	private:
 		Container<Entity> entities;
 

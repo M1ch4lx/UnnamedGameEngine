@@ -4,6 +4,8 @@
 
 #include "OpenGLCommon.h"
 
+#include "OpenGLUniform.h"
+
 namespace UEngine
 {
 	class OpenGLShader :public Shader
@@ -11,6 +13,24 @@ namespace UEngine
 	private:
 		unsigned int program;
 
+		std::unordered_map<std::string, int> locations;
+
+		std::vector<Ref<Uniform>> uniforms;
+
+	public:
+		OpenGLShader(const ShaderSource& vertexSrc, const ShaderSource& fragmentSrc);
+
+		~OpenGLShader();
+
+		void Bind() override;
+
+		Ref<Uniform> GetUniform(const std::string& name) override;
+
+		const std::vector<Ref<Uniform>>& GetUniforms() override;
+
+		static ShaderDataType ToShaderDataType(GLenum glShaderDataType);
+
+	private:
 		unsigned int CompileShader(GLenum shaderType, const ShaderSource& shaderSrc);
 
 		void AttachShader(unsigned int shader);
@@ -20,28 +40,5 @@ namespace UEngine
 		void DeleteShaderProgram();
 
 		int GetUniformLocation(const std::string& name);
-
-	public:
-		OpenGLShader(const ShaderSource& vertexSrc, const ShaderSource& fragmentSrc);
-
-		~OpenGLShader();
-
-		void Bind() override;
-
-		void SetUniform(const std::string& name, const int val) override;
-
-		void SetUniform(const std::string& name, const float val) override;
-
-		void SetUniform(const std::string& name, const Vector2& val) override;
-
-		void SetUniform(const std::string& name, const Vector3& val) override;
-
-		void SetUniform(const std::string& name, const Vector4& val) override;
-
-		void SetUniform(const std::string& name, const Color4& val) override;
-
-		void SetUniform(const std::string& name, const Color3& val) override;
-
-		void SetUniform(const std::string& name, const Matrix4& matrix) override;
 	};
 }

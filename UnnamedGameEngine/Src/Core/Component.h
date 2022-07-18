@@ -14,7 +14,7 @@ namespace UEngine
 
 	class Component
 	{
-		friend class ComponentsService;
+		friend class ComponentsManager;
 		friend class Entity;
 	protected:
 		Component();
@@ -78,9 +78,9 @@ namespace UEngine
 		}
 	};
 
-	class ComponentsService :public IService
+	class ComponentsManager :public IService
 	{
-		SERVICE(ComponentsService)
+		SERVICE(ComponentsManager)
 	private:
 		ComponentTypeID GenerateComponentTypeID();
 
@@ -135,7 +135,7 @@ namespace UEngine
 	class ComponentSystem :public ISystem
 	{
 	protected:
-		Service<ComponentsService> componentsService;
+		Service<ComponentsManager> componentsService;
 
 	public:
 		template<typename T>

@@ -37,6 +37,40 @@ namespace UEngine
 		
 		glDeleteShader(vertexShader);
 		glDeleteShader(fragmentShader);
+
+		// Load and cache uniforms
+
+		int count = 0;
+		glGetProgramiv(program, GL_ACTIVE_UNIFORMS, &count);
+		if (count == 0)
+		{
+			return;
+		}
+
+		uniforms.resize(static_cast<size_t>(count));
+		
+		// Maximum uniform name size
+		constexpr unsigned int nameBufferSize = 64;
+
+		for (int i = 0; i < count; i++)
+		{
+			char nameBuffer[nameBufferSize];
+			int nameLength = 0;
+			GLenum type = 0;
+			int size = 0;
+
+			glGetActiveUniform(program, i, nameBufferSize,
+				&nameLength, &size, &type, nameBuffer);
+
+			std::string name(nameBuffer, nameLength);
+
+			int location = glGetUniformLocation(program, name.c_str());
+
+			uniforms[location] = Ref<Uniform>(new OpenGLUniform(this,
+				location, name, size, ToShaderDataType(type)));
+
+			locations[name] = location;
+		}
 	}
 
 	void OpenGLShader::DeleteShaderProgram()
@@ -50,14 +84,14 @@ namespace UEngine
 
 	int OpenGLShader::GetUniformLocation(const std::string& name)
 	{
-		int location = glGetUniformLocation(program, name.c_str());
+		auto iter = locations.find(name);
 
-		if (location == -1)
+		if (iter == locations.end())
 		{
 			throw std::exception("Cannot find uniform");
 		}
 
-		return location;
+		return iter->second;
 	}
 
 	OpenGLShader::OpenGLShader(const ShaderSource& vertexSrc, const ShaderSource& fragmentSrc) :
@@ -76,43 +110,35 @@ namespace UEngine
 		glUseProgram(program);
 	}
 
-	void OpenGLShader::SetUniform(const std::string& name, const int val)
+	Ref<Uniform> OpenGLShader::GetUniform(const std::string& name)
 	{
-		glUniform1i(GetUniformLocation(name), val);
+		return uniforms[GetUniformLocation(name)];
 	}
 
-	void OpenGLShader::SetUniform(const std::string& name, const float val)
+	const std::vector<Ref<Uniform>>& OpenGLShader::GetUniforms()
 	{
-		glUniform1f(GetUniformLocation(name), val);
+		return uniforms;
 	}
 
-	void OpenGLShader::SetUniform(const std::string& name, const Vector2& val)
+	ShaderDataType OpenGLShader::ToShaderDataType(GLenum glShaderDataType)
 	{
-		glUniform2f(GetUniformLocation(name), val.x, val.y);
-	}
+		switch (glShaderDataType)
+		{
+		case GL_FLOAT: return ShaderDataType::Float;
+		case GL_FLOAT_VEC2: return ShaderDataType::Float2;
+		case GL_FLOAT_VEC3: return ShaderDataType::Float3;
+		case GL_FLOAT_VEC4: return ShaderDataType::Float4;
 
-	void OpenGLShader::SetUniform(const std::string& name, const Vector3& val)
-	{
-		glUniform3f(GetUniformLocation(name), val.x, val.y, val.z);
-	}
+		case GL_INT: return ShaderDataType::Int;
+		case GL_INT_VEC2: return ShaderDataType::Int2;
+		case GL_INT_VEC3: return ShaderDataType::Int3;
+		case GL_INT_VEC4: return ShaderDataType::Int4;
 
-	void OpenGLShader::SetUniform(const std::string& name, const Vector4& val)
-	{
-		glUniform4f(GetUniformLocation(name), val.x, val.y, val.z, val.w);
-	}
+		case GL_FLOAT_MAT2: return ShaderDataType::Mat2;
+		case GL_FLOAT_MAT3: return ShaderDataType::Mat3;
+		case GL_FLOAT_MAT4: return ShaderDataType::Mat4;
+		}
 
-	void OpenGLShader::SetUniform(const std::string& name, const Color4& val)
-	{
-		glUniform4f(GetUniformLocation(name), val.r, val.g, val.b, val.a);
-	}
-
-	void OpenGLShader::SetUniform(const std::string& name, const Color3& val)
-	{
-		glUniform3f(GetUniformLocation(name), val.r, val.g, val.b);
-	}
-
-	void OpenGLShader::SetUniform(const std::string& name, const Matrix4& matrix)
-	{
-		glUniformMatrix4fv(GetUniformLocation(name), 1, GL_TRUE, matrix.ConstData());
+		return ShaderDataType::None;
 	}
 }

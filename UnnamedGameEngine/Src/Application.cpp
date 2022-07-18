@@ -132,12 +132,18 @@ void Application::Run(int argc, char* argv[])
 		ShaderSource("Assets/Shaders/FlatColor.glsl")
 	);
 
-	renderer2D->ShadersConfiguration().FlatColor = flatColorShader;
+	Service<MaterialLibrary> materialLibrary;
+
+	const auto& flatColorMat = materialLibrary->CreateMaterial("FlatColorMat", flatColorShader);
+
+	Ref<MaterialInstance> mi(new MaterialInstance(flatColorMat));
+	mi->Set("m_Color", Color4(0.5f, 0.5f, 0.5f, 1.f));
+	
+	renderer2D->SetMaterial(mi);
 
 	Image image;
 	image.LoadFromFile("Assets/Textures/test.png");
 
-	
 	// auto texture = factory->CreateTexture(image);
 	// texture->Bind(0);
 	// renderer2D->ShadersConfiguration().FlatColor->SetUniform("Texture", 0);
@@ -192,7 +198,7 @@ void Application::Run(int argc, char* argv[])
 		renderer2D->BeginScene(camera);
 
 		// Render scene
-		renderer2D->RenderRectangle(model, Color4(1.f, 1.f, 1.f, 1.f));
+		renderer2D->RenderRectangle(model);
 
 		// Render GUI
 		//glClear(GL_DEPTH_BUFFER_BIT);
