@@ -32,6 +32,11 @@ namespace UEngine
 		return Vector2(x * scalar, y * scalar);
 	}
 
+	Vector2 Vector2::operator/(float scalar) const
+	{
+		return Vector2(x / scalar, y / scalar);
+	}
+
 	Vector2 Vector2::Normalized() const
 	{
 		auto magnitude = Magnitude();
@@ -54,6 +59,12 @@ namespace UEngine
 	{
 		x *= scalar;
 		y *= scalar;
+	}
+
+	void Vector2::operator/=(float scalar)
+	{
+		x /= scalar;
+		y /= scalar;
 	}
 
 	void Vector2::Normalize()
@@ -110,6 +121,11 @@ namespace UEngine
 		return Vector3(x * scalar, y * scalar, z * scalar);
 	}
 
+	Vector3 Vector3::operator/(float scalar) const
+	{
+		return Vector3(x / scalar, y / scalar, z / scalar);
+	}
+
 	Vector3 Vector3::Normalized() const
 	{
 		auto magnitude = Magnitude();
@@ -135,6 +151,13 @@ namespace UEngine
 		x *= scalar;
 		y *= scalar;
 		z *= scalar;
+	}
+
+	void Vector3::operator/=(float scalar)
+	{
+		x /= scalar;
+		y /= scalar;
+		z /= scalar;
 	}
 
 	void Vector3::Normalize()

@@ -18,6 +18,8 @@ namespace UEngine
 	{
 		Clear();
 
+		stbi_set_flip_vertically_on_load(true);
+
 		pixels = stbi_load(path.c_str(), &width,
 			&height, &bpp, static_cast<int>(desiredBpp));
 	}

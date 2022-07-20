@@ -4,7 +4,7 @@
 namespace UEngine
 {
 	Camera2D::Camera2D() :
-		size(6.f)
+		size(1.f)
 	{
 		transformation.Scale = Vector(16.f, 9.f);
 	}
@@ -41,7 +41,7 @@ namespace UEngine
 
 	Vector2 Camera2D::GetDimensions() const
 	{
-		return transformation.Scale * (size * SIZE_MULTIPLIER);
+		return transformation.Scale * size;
 	}
 
 	Matrix4 Camera2D::GetViewMatrix() const

@@ -75,6 +75,13 @@ namespace UEngine
 
 		context.Bind();
 		gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+
+		glDebugMessageCallback([](GLenum source, GLenum type, GLuint id,
+			GLenum severity, GLsizei length, const GLchar* message, const void* userData)
+			{
+				std::cout << "[OpenGL Error] " << type << ": " << message << std::endl;
+
+			}, nullptr);
 	}
 
 	void OpenGLWindow::Destroy()

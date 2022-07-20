@@ -46,7 +46,12 @@ namespace UEngine
 
     unsigned int Material::GetUniformIndex(const std::string& name)
     {
-        return indices[name];
+        const auto& iter = indices.find(name);
+        if (iter == indices.end())
+        {
+            throw std::exception("Cannot find uniform index");
+        }
+        return iter->second;
     }
 
     const Ref<Uniform>& Material::GetUniform(unsigned int index)

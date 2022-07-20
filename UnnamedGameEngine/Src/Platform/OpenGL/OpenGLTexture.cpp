@@ -3,21 +3,55 @@
 
 namespace UEngine
 {
-	OpenGLTexture::OpenGLTexture(const Image& image) :
-		id(0), width(image.Width()), height(image.Height())
+	static GLenum GetGLWrapMode(TextureWrap wrap)
 	{
-		glGenTextures(1, &id);
+		switch (wrap)
+		{
+		case TextureWrap::Clamp: return GL_CLAMP_TO_EDGE;
 
-		// RGBA internal format
-		glTextureStorage2D(id, 0, GL_RGBA, width, height);
+		case TextureWrap::Repeat: return GL_REPEAT;
+		}
 
-		glTextureParameteri(id, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTextureParameteri(id, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		throw std::exception("Texture wrap mode not supported");
+	}
 
-		glTextureParameteri(id, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTextureParameteri(id, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	static GLenum GetGLFilter(TextureFilter filter)
+	{
+		switch (filter)
+		{
+		case TextureFilter::Point: return GL_NEAREST;
 
-		SetTextureData(image.Bpp(), image.Data());
+		case TextureFilter::Linear: return GL_LINEAR;
+		}
+
+		throw std::exception("Texture filter not supported");
+	}
+
+	static std::tuple<GLenum, GLenum> GetGLFormat(BPP imageFormat)
+	{
+		switch (imageFormat)
+		{
+		case BPP::RGB: return { GL_RGB8, GL_RGB };
+
+		case BPP::RGBA: return { GL_RGBA8, GL_RGBA };
+		}
+
+		throw std::exception("Pixel format not supported");
+	}
+
+	OpenGLTexture::OpenGLTexture(const Image& image) :
+		id(0),
+		size(static_cast<float>(image.Width()), static_cast<float>(image.Height()))
+	{
+		auto [internalFormat, dataFormat] = GetGLFormat(image.Bpp());
+
+		glCreateTextures(GL_TEXTURE_2D, 1, &id);
+
+		glTextureStorage2D(id, 1, internalFormat, image.Width(), image.Height());
+
+		ApplySettings(settings);
+
+		glTextureSubImage2D(id, 0, 0, 0, image.Width(), image.Height(), dataFormat, GL_UNSIGNED_BYTE, image.Data());
 	}
 
 	OpenGLTexture::~OpenGLTexture()
@@ -30,24 +64,24 @@ namespace UEngine
 		glBindTextureUnit(slot, id);
 	}
 
-	void OpenGLTexture::SetTextureData(BPP dataFormat, const void* data)
+	const Vector2& OpenGLTexture::Size() const
 	{
-		unsigned int bpp = 0;
-		switch (dataFormat)
-		{
-		case BPP::RGB:
-			bpp = GL_RGB;
-			break;
+		return size;
+	}
 
-		case BPP::RGBA:
-			bpp = GL_RGBA;
-			break;
+	void OpenGLTexture::ApplySettings(const TextureSettings& settings)
+	{
+		glTextureParameteri(id, GL_TEXTURE_MIN_FILTER, GetGLFilter(settings.FilterMin));
+		glTextureParameteri(id, GL_TEXTURE_MAG_FILTER, GetGLFilter(settings.FilterMag));
 
-		default:
-			throw std::exception("Format not supported");
-			break;
-		}
+		glTextureParameteri(id, GL_TEXTURE_WRAP_S, GetGLWrapMode(settings.WrapS));
+		glTextureParameteri(id, GL_TEXTURE_WRAP_T, GetGLWrapMode(settings.WrapT));
 
-		glTextureSubImage2D(id, 0, 0, 0, width, height, bpp, GL_UNSIGNED_BYTE, data);
+		this->settings = settings;
+	}
+
+	const TextureSettings& OpenGLTexture::GetSettings() const
+	{
+		return settings;
 	}
 }

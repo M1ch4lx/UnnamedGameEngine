@@ -6,7 +6,7 @@ namespace UEngine
 	OpenGLVertexBuffer::OpenGLVertexBuffer() :
 		id(0), count(0)
 	{
-		glGenBuffers(1, &id);
+		glCreateBuffers(1, &id);
 	}
 
 	OpenGLVertexBuffer::~OpenGLVertexBuffer()
@@ -48,7 +48,7 @@ namespace UEngine
 	OpenGLIndexBuffer::OpenGLIndexBuffer(unsigned int* indices, unsigned int count) :
 		id(0), count(count)
 	{
-		glGenBuffers(1, &id);
+		glCreateBuffers(1, &id);
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * count, indices, GL_STATIC_DRAW);

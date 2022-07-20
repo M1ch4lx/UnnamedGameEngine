@@ -73,4 +73,19 @@ namespace UEngine
 	{
 		GetUniform(name)->Upload(matrix);
 	}
+
+	void ShaderLibrary::AddShader(const std::string& name, const Ref<Shader>& shader)
+	{
+		shaders[name] = shader;
+	}
+
+	const Ref<Shader>& ShaderLibrary::FindShader(const std::string& name)
+	{
+		const auto& iter = shaders.find(name);
+		if (iter == shaders.end())
+		{
+			throw std::exception("Cannot find shader");
+		}
+		return iter->second;
+	}
 }

@@ -2,7 +2,7 @@
 
 #include "OpenGLCommon.h"
 
-#include "Renderer/Renderer2D.h"
+#include "Renderer/2D/Renderer2D.h"
 
 #include "Renderer/GraphicsFactory.h"
 

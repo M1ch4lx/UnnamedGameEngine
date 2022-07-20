@@ -14,18 +14,23 @@ namespace UEngine
 		return (degrees / 180.f) * Pi();
 	}
 
-	constexpr float Unit()
+	constexpr float PixelCordinates(float pixelsPerUnit, float units)
 	{
-		return 64.f;
+		return units * pixelsPerUnit;
 	}
 
-	constexpr float RealCordinates(float units)
+	constexpr float UnitCordinates(float pixelsPerUnit, float pixels)
 	{
-		return units * Unit();
+		return pixels / pixelsPerUnit;
 	}
 
-	constexpr float UnitCordinates(float real)
+	inline Vector2 PixelCordinates(float pixelsPerUnit, const Vector2& units)
 	{
-		return real / Unit();
+		return units * pixelsPerUnit;
+	}
+
+	inline Vector2 UnitCordinates(float pixelsPerUnit, const Vector2& pixels)
+	{
+		return pixels / pixelsPerUnit;
 	}
 }

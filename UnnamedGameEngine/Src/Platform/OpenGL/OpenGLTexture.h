@@ -11,8 +11,9 @@ namespace UEngine
 	private:
 		unsigned int id;
 
-		int width;
-		int height;
+		Vector2 size;
+
+		TextureSettings settings;
 		
 	public:
 		OpenGLTexture(const Image& image);
@@ -21,7 +22,10 @@ namespace UEngine
 
 		void Bind(unsigned int slot) override;
 
-	private:
-		void SetTextureData(BPP dataFormat, const void* data);
+		const Vector2& Size() const override;
+
+		void ApplySettings(const TextureSettings& settings) override;
+
+		const TextureSettings& GetSettings() const override;
 	};
 }

@@ -6,6 +6,7 @@
 
 #include "Platform/GraphicsLibrary.h"
 #include "Data/Image.h"
+#include "Renderer/2D/Sprite2D.h"
 
 using namespace UEngine;
 
@@ -132,21 +133,26 @@ void Application::Run(int argc, char* argv[])
 		ShaderSource("Assets/Shaders/FlatColor.glsl")
 	);
 
+	auto textureShader = factory->CreateShader(
+		ShaderSource("Assets/Shaders/TextureVertexShader.glsl"),
+		ShaderSource("Assets/Shaders/TextureFragmentShader.glsl")
+	);
+
 	Service<MaterialLibrary> materialLibrary;
 
 	const auto& flatColorMat = materialLibrary->CreateMaterial("FlatColorMat", flatColorShader);
 
 	Ref<MaterialInstance> mi(new MaterialInstance(flatColorMat));
 	mi->Set("m_Color", Color4(0.5f, 0.5f, 0.5f, 1.f));
+
+	const auto& textureMat = materialLibrary->CreateMaterial("TextureMaterial", textureShader);
+
+	Ref<MaterialInstance> texMi(new MaterialInstance(textureMat));
 	
-	renderer2D->SetMaterial(mi);
+	renderer2D->SetMaterial(texMi);
 
 	Image image;
 	image.LoadFromFile("Assets/Textures/test.png");
-
-	// auto texture = factory->CreateTexture(image);
-	// texture->Bind(0);
-	// renderer2D->ShadersConfiguration().FlatColor->SetUniform("Texture", 0);
 
 	Camera2D camera;
 
@@ -158,6 +164,48 @@ void Application::Run(int argc, char* argv[])
 
 	float cameraSize = camera.GetSize();
 
+	auto texVbo = factory->CreateVertexBuffer();
+
+	glEnable(GL_TEXTURE_2D);
+	glEnable(GL_BLEND);
+
+	auto texture = factory->CreateTexture(image);
+	texture->Bind(0);
+
+	Sprite2D sprite("sad", texture);
+
+	auto rect = sprite.GetBoundingRect();
+
+	VertexTexColor vertices[4]
+	{
+		{ {rect.Right, rect.Top, 0.0f},  {1.f, 1.f}, { 1.f, 0.f, 1.f, 1.f }},   // top right
+		{ {rect.Right, rect.Bottom, 0.0f},  {1.f, 0.f}, { 1.f, 0.f, 1.f, 1.f } },   // bottom right
+		{ {rect.Left, rect.Bottom, 0.0f}, {0.f, 0.f}, { 1.f, 0.f, 1.f, 1.f } },  // bottom left
+		{ {rect.Left, rect.Top, 0.0f}, {0.f, 1.f}, { 1.f, 0.f, 1.f, 1.f } }   // top left 
+	};
+
+	/*
+	float vertices[] = {
+		// positions          // colors           // texture coords
+		 0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 1.0f,   1.0f, 1.0f,   // top right
+		 0.5f, -0.5f, 0.0f,   1.0f, 1.0f, 1.0f,   1.0f, 0.0f,   // bottom right
+		-0.5f, -0.5f, 0.0f,   1.0f, 1.0f, 1.0f,   0.0f, 0.0f,   // bottom left
+		-0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 1.0f,   0.0f, 1.0f    // top left 
+	};
+	*/
+
+	unsigned int indices[] = {
+		0, 1, 3,   // first triangle
+		1, 2, 3    // second triangle
+	};
+	auto texIbo = factory->CreateIndexBuffer(indices, 6);
+	texVbo->SetData(vertices, 4, VertexTexColor::Layout());
+
+	auto texVao = factory->CreateVertexArray(texVbo, texIbo);
+
+	// Set texture sampler
+	texMi->Set("m_textureSampler", 0);
+
 	auto renderImGui = [&]()
 	{
 		ImGui_ImplOpenGL3_NewFrame();
@@ -168,7 +216,7 @@ void Application::Run(int argc, char* argv[])
 
 		ImGui::SliderFloat("rotation", &model.Rotation, 0.f, 360.f);
 
-		ImGui::SliderFloat2("position", model.Position.Data(), -200.f, 200.f);
+		ImGui::SliderFloat2("position", model.Position.Data(), -10.f, 10.f);
 
 		ImGui::SliderFloat2("scale", model.Scale.Data(), 0.f, 10.f);
 
@@ -178,7 +226,7 @@ void Application::Run(int argc, char* argv[])
 
 		ImGui::SliderFloat("rotation", &camera.GetTransformation().Rotation, 0.f, 360.f);
 
-		ImGui::SliderFloat2("position", camera.GetTransformation().Position.Data(), -200.f, 200.f);
+		ImGui::SliderFloat2("position", camera.GetTransformation().Position.Data(), -10.f, 10.f);
 
 		ImGui::SliderFloat("size", &cameraSize, 0.f, 10.f);
 
@@ -198,7 +246,15 @@ void Application::Run(int argc, char* argv[])
 		renderer2D->BeginScene(camera);
 
 		// Render scene
-		renderer2D->RenderRectangle(model);
+		//renderer2D->RenderRectangle(model);
+		renderer2D->Render(texVao, model);
+
+		/*
+		texVao->Bind();
+		textureShader->Bind();
+		textureShader->SetUniform("m_textureSampler", 0);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		*/
 
 		// Render GUI
 		//glClear(GL_DEPTH_BUFFER_BIT);

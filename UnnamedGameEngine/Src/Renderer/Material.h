@@ -4,9 +4,21 @@
 
 namespace UEngine
 {
+	struct MaterialFlags
+	{
+		bool EnableDepthTest;
+
+		MaterialFlags() :
+			EnableDepthTest(false)
+		{}
+	};
+
 	class Material :public FactoryObject
 	{
 		friend class MaterialLibrary;
+	public:
+		MaterialFlags Flags;
+
 	private:
 		Ref<Shader> shader;
 

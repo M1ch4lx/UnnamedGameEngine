@@ -55,4 +55,16 @@ namespace UEngine
 
 		virtual const std::vector<Ref<Uniform>>& GetUniforms() = 0;
 	};
+
+	class ShaderLibrary :public IService
+	{
+		SERVICE(ShaderLibrary)
+	private:
+		std::unordered_map<std::string, Ref<Shader>> shaders;
+
+	public:
+		void AddShader(const std::string& name, const Ref<Shader>& shader);
+
+		const Ref<Shader>& FindShader(const std::string& name);
+	};
 }

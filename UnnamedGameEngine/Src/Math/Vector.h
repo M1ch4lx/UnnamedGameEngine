@@ -22,6 +22,8 @@ namespace UEngine
 
 		Vector2 operator*(float scalar) const;
 
+		Vector2 operator/(float scalar) const;
+
 		Vector2 Normalized() const;
 
 		void operator+=(const Vector2& vec);
@@ -29,6 +31,8 @@ namespace UEngine
 		void operator-=(const Vector2& vec);
 
 		void operator*=(float scalar);
+
+		void operator/=(float scalar);
 
 		void Normalize();
 
@@ -65,6 +69,8 @@ namespace UEngine
 
 		Vector3 operator*(float scalar) const;
 
+		Vector3 operator/(float scalar) const;
+
 		Vector3 Normalized() const;
 
 		void operator+=(const Vector3& vec);
@@ -72,6 +78,8 @@ namespace UEngine
 		void operator-=(const Vector3& vec);
 
 		void operator*=(float scalar);
+
+		void operator/=(float scalar);
 
 		void Normalize();
 

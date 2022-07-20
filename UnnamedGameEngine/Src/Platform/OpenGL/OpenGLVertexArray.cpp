@@ -5,12 +5,14 @@ namespace UEngine
 {
 	OpenGLVertexArray::OpenGLVertexArray(const Ref<VertexBuffer>& vertexBuffer, const Ref<IndexBuffer>& indexBuffer)
 	{
-		glGenVertexArrays(1, &id);
+		glCreateVertexArrays(1, &id);
 
 		glBindVertexArray(id);
 
 		SetVertexBuffer(vertexBuffer);
 		SetIndexBuffer(indexBuffer);
+
+		glBindVertexArray(0);
 	}
 
 	OpenGLVertexArray::~OpenGLVertexArray()
@@ -35,7 +37,7 @@ namespace UEngine
 		for (const auto& element : layout.Elements())
 		{
 			glVertexAttribPointer(attribIndex, element.Count, GL_FLOAT,
-				GL_FALSE, element.Size, (const void*)element.Offset);
+				GL_FALSE, layout.Stride(), (const void*)element.Offset);
 
 			glEnableVertexAttribArray(attribIndex);
 

@@ -64,10 +64,10 @@ namespace UEngine
 		if (!rectangleVao)
 		{
 			Vertex vertices[] = {
-			{ 1.f * Unit(),  1.f * Unit(), 0.0f},   // top right
-			{ 1.f * Unit(), -1.f * Unit(), 0.0f },   // bottom right
-			{ -1.f * Unit(), -1.f * Unit(), 0.0f },  // bottom left
-			{ -1.f * Unit(),  1.f * Unit(), 0.0f }   // top left 
+			{ 1.f,  1.f, 0.0f},   // top right
+			{ 1.f, -1.f, 0.0f },   // bottom right
+			{ -1.f, -1.f, 0.0f },  // bottom left
+			{ -1.f,  1.f, 0.0f }   // top left 
 			};
 
 			unsigned int indices[] = {

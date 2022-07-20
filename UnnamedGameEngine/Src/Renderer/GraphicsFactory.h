@@ -5,8 +5,9 @@
 #include "VertexBuffer.h"
 #include "VertexArray.h"
 #include "Shader.h"
-#include "Renderer2D.h"
 #include "Texture.h"
+
+#include "2D/Renderer2D.h"
 
 namespace UEngine
 {

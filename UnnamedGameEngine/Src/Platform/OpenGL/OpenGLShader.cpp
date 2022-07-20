@@ -137,6 +137,8 @@ namespace UEngine
 		case GL_FLOAT_MAT2: return ShaderDataType::Mat2;
 		case GL_FLOAT_MAT3: return ShaderDataType::Mat3;
 		case GL_FLOAT_MAT4: return ShaderDataType::Mat4;
+
+		case GL_SAMPLER_2D: return ShaderDataType::Int;
 		}
 
 		return ShaderDataType::None;
