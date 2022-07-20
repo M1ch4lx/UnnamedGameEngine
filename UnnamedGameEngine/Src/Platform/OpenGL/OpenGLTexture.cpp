@@ -61,6 +61,7 @@ namespace UEngine
 
 	void OpenGLTexture::Bind(unsigned int slot)
 	{
+		// TODO: reduce redundant bindings
 		glBindTextureUnit(slot, id);
 	}
 

@@ -58,6 +58,7 @@ namespace UEngine
 				WindowResizeSignal signal(props.width, props.height);
 
 				window->EmitSignal(signal);
+				window->Context()->EmitSignal(signal);
 			});
 
 		// Close callback

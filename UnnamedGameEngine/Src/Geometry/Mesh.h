@@ -7,5 +7,10 @@
 
 namespace UEngine
 {
-	
+	template<typename VertexType>
+	class StaticMesh
+	{
+	private:
+		std::vector<VertexType> vertices;
+	};
 }

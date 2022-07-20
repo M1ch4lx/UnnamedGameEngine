@@ -41,7 +41,7 @@ namespace UEngine
 
 		~OpenGLIndexBuffer();
 
-		void Bind() const override;
+		void Bind() override;
 
 		unsigned int GetCount() const override;
 	};

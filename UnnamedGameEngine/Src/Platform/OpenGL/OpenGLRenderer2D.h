@@ -16,12 +16,20 @@ namespace UEngine
 		// ViewProjection matrix
 		Matrix4 viewProjectionMatrix;
 
+		Color3 clearColor;
+
 		Ref<MaterialInstance> materialInstance;
+
+		DenormalizedViewport viewport;
 
 	public:
 		OpenGLRenderer2D(RenderContext* context);
 
 		void ClearScreen() override;
+
+		void SetClearColor(const Color3& color) override;
+
+		const Color3& GetClearColor() const override;
 
 		void ClearDepth() override;
 

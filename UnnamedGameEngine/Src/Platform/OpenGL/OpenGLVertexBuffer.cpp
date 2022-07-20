@@ -16,6 +16,8 @@ namespace UEngine
 
 	void OpenGLVertexBuffer::Bind()
 	{
+		REMEMBER_BINDING();
+
 		glBindBuffer(GL_ARRAY_BUFFER, id);
 	}
 
@@ -59,8 +61,10 @@ namespace UEngine
 		glDeleteBuffers(1, &id);
 	}
 
-	void OpenGLIndexBuffer::Bind() const
+	void OpenGLIndexBuffer::Bind()
 	{
+		REMEMBER_BINDING();
+		
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id);
 	}
 

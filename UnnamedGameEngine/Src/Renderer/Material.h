@@ -2,14 +2,21 @@
 
 #include "Shader.h"
 
+#include "Blending.h"
+
 namespace UEngine
 {
 	struct MaterialFlags
 	{
 		bool EnableDepthTest;
 
+		bool EnableBlending;
+
+		BlendFunction Blending;
+
 		MaterialFlags() :
-			EnableDepthTest(false)
+			EnableDepthTest(false), EnableBlending(false),
+			Blending(BlendFunction::Multiplication)
 		{}
 	};
 

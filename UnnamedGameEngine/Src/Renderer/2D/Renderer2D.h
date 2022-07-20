@@ -13,6 +13,8 @@
 
 #include "Camera2D.h"
 
+#include "Renderer/Blending.h"
+
 namespace UEngine
 {
 	class Renderer2D :public FactoryObject
@@ -25,6 +27,10 @@ namespace UEngine
 		virtual void Display() = 0;
 
 		virtual void ClearScreen() = 0;
+
+		virtual void SetClearColor(const Color3& color) = 0;
+
+		virtual const Color3& GetClearColor() const = 0;
 
 		virtual void ClearDepth() = 0;
 

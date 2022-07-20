@@ -107,6 +107,8 @@ namespace UEngine
 
 	void OpenGLShader::Bind()
 	{
+		REMEMBER_BINDING();
+
 		glUseProgram(program);
 	}
 

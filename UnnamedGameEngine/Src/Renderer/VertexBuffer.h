@@ -21,7 +21,7 @@ namespace UEngine
 	class IndexBuffer :public FactoryObject
 	{
 	public:
-		virtual void Bind() const = 0;
+		virtual void Bind() = 0;
 
 		virtual unsigned int GetCount() const = 0;
 	};

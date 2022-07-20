@@ -166,8 +166,11 @@ void Application::Run(int argc, char* argv[])
 
 	auto texVbo = factory->CreateVertexBuffer();
 
-	glEnable(GL_TEXTURE_2D);
 	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	//glDisable(GL_BLEND);
+
+	renderer2D->SetClearColor(Color(1.f, 0.f, 1.f));
 
 	auto texture = factory->CreateTexture(image);
 	texture->Bind(0);

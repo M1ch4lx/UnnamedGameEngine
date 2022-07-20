@@ -6,12 +6,24 @@ namespace UEngine
 	OpenGLRenderer2D::OpenGLRenderer2D(RenderContext* context) :
 		context(context)
 	{
-		
+		clearColor = Color(0.f, 0.f, 0.f);
+		SetClearColor(clearColor);
 	}
 
 	void OpenGLRenderer2D::ClearScreen()
 	{
 		glClear(GL_COLOR_BUFFER_BIT);
+	}
+
+	void OpenGLRenderer2D::SetClearColor(const Color3& color)
+	{
+		clearColor = color;
+		glClearColor(color.r, color.g, color.b, 1.f);
+	}
+
+	const Color3& OpenGLRenderer2D::GetClearColor() const
+	{
+		return clearColor;
 	}
 
 	void OpenGLRenderer2D::ClearDepth()
@@ -27,6 +39,26 @@ namespace UEngine
 	void OpenGLRenderer2D::BeginScene(const Camera2D& camera)
 	{
 		viewProjectionMatrix = camera.GetProjectionMatrix() * camera.GetViewMatrix();
+		const auto& vp = camera.GetViewport();
+
+		const float width = static_cast<const float>(context->Width());
+		const float height = static_cast<const float>(context->Height());
+		
+		DenormalizedViewport denormalizedVp(
+			static_cast<int>(height * vp.Top),
+			static_cast<int>(width * vp.Left),
+			static_cast<int>(height * vp.Bottom),
+			static_cast<int>(width * vp.Right));
+
+		// Reduces redundant glViewport calling
+		if (viewport != denormalizedVp)
+		{
+			viewport = denormalizedVp;
+
+			glViewport(denormalizedVp.Left, denormalizedVp.Top,
+				denormalizedVp.Right - denormalizedVp.Left,
+				denormalizedVp.Bottom - denormalizedVp.Top);
+		}
 	}
 
 	void OpenGLRenderer2D::EndScene()

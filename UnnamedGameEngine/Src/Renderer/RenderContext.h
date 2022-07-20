@@ -1,10 +1,33 @@
 #pragma once
 
 #include "Core/FactoryObject.h"
+#include "Core/Signal.h"
 
 namespace UEngine
 {
-	class RenderContext :public FactoryObject
+	class WindowResizeSignal :public Signal
+	{
+	private:
+		unsigned int width;
+		unsigned int height;
+
+	public:
+		WindowResizeSignal(unsigned int width, unsigned int height) :
+			width(width), height(height)
+		{}
+
+		unsigned int Width() const
+		{
+			return width;
+		}
+
+		unsigned int Height() const
+		{
+			return height;
+		}
+	};
+
+	class RenderContext :public FactoryObject, public SignalListener
 	{
 	protected:
 		static RenderContext* currentContext;

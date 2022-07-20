@@ -4,24 +4,62 @@
 
 namespace UEngine
 {
+	struct DenormalizedViewport
+	{
+		int Top;
+		int Bottom;
+		int Left;
+		int Right;
+
+		DenormalizedViewport() :
+			Top(0), Bottom(1), Left(0), Right(1)
+		{}
+
+		DenormalizedViewport(int top, int left, int bottom, int right) :
+			Top(top), Left(left), Bottom(bottom), Right(right)
+		{}
+
+		void Set(int top, int left, int bottom, int right)
+		{
+			Top = top;
+			Left = left;
+			Bottom = bottom;
+			Right = right;
+		}
+
+		bool operator==(const DenormalizedViewport& other) const
+		{
+			return Left == other.Left && Right == other.Right
+				&& Top == other.Top && Bottom == other.Bottom;
+		}
+
+		bool operator!=(const DenormalizedViewport& other) const
+		{
+			return !(*this == other);
+		}
+	};
+
 	struct Viewport
 	{
-		Vector2 begin;
-
-		Vector2 end;
+		float Top;
+		float Bottom;
+		float Left;
+		float Right;
 
 		Viewport() :
-			begin(0.f, 0.f), end(1.f, 1.f)
+			Top(0.f), Bottom(1.f), Left(0.f), Right(1.f)
 		{}
 
-		Viewport(float xBegin, float yBegin, float xEnd, float yEnd) :
-			begin(xBegin, yBegin), end(xEnd, yEnd)
+		Viewport(float top, float left, float bottom, float right) :
+			Top(top), Left(left), Bottom(bottom), Right(right)
 		{}
 
-		void Set(float xBegin, float yBegin, float xEnd, float yEnd)
+		void Set(float top, float left, float bottom, float right)
 		{
-			begin.Set(xBegin, yBegin);
-			end.Set(xEnd, yEnd);
+			Top = top;
+			Left = left;
+			Bottom = bottom;
+			Right = right;
 		}
 	};
 
