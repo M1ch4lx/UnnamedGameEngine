@@ -1,5 +1,7 @@
 #pragma once
 
+#include <array>
+
 // ImGui
 #include "imgui/imgui.h"
 #include "imgui/backends/imgui_impl_glfw.h"

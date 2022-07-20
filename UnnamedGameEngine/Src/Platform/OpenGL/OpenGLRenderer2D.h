@@ -46,5 +46,8 @@ namespace UEngine
 		void Render(const Ref<VertexArray>& vao, const Transformation2D& transform) override;
 
 		void RenderRectangle(const Transformation2D& transform) override;
+
+	private:
+		void ApplyMaterialFlags();
 	};
 }

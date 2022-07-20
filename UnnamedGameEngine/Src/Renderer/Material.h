@@ -2,8 +2,6 @@
 
 #include "Shader.h"
 
-#include "Blending.h"
-
 namespace UEngine
 {
 	struct MaterialFlags
@@ -12,11 +10,8 @@ namespace UEngine
 
 		bool EnableBlending;
 
-		BlendFunction Blending;
-
 		MaterialFlags() :
-			EnableDepthTest(false), EnableBlending(false),
-			Blending(BlendFunction::Multiplication)
+			EnableDepthTest(false), EnableBlending(false)
 		{}
 	};
 

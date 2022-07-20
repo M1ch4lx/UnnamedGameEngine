@@ -8,6 +8,12 @@
 #include "Data/Image.h"
 #include "Renderer/2D/Sprite2D.h"
 
+// TODO:
+// - Add RenderLayer2D class which will use Z component to sort objects with depth testing,
+// - Add some sorting system for transparent objects
+// - Add mesh class which would buffer vertex data
+// - Add some batch rendering system
+
 using namespace UEngine;
 
 template<class T>
@@ -166,9 +172,8 @@ void Application::Run(int argc, char* argv[])
 
 	auto texVbo = factory->CreateVertexBuffer();
 
-	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	//glDisable(GL_BLEND);
+	textureMat->Flags.EnableBlending = true;
 
 	renderer2D->SetClearColor(Color(1.f, 0.f, 1.f));
 
@@ -186,16 +191,6 @@ void Application::Run(int argc, char* argv[])
 		{ {rect.Left, rect.Bottom, 0.0f}, {0.f, 0.f}, { 1.f, 0.f, 1.f, 1.f } },  // bottom left
 		{ {rect.Left, rect.Top, 0.0f}, {0.f, 1.f}, { 1.f, 0.f, 1.f, 1.f } }   // top left 
 	};
-
-	/*
-	float vertices[] = {
-		// positions          // colors           // texture coords
-		 0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 1.0f,   1.0f, 1.0f,   // top right
-		 0.5f, -0.5f, 0.0f,   1.0f, 1.0f, 1.0f,   1.0f, 0.0f,   // bottom right
-		-0.5f, -0.5f, 0.0f,   1.0f, 1.0f, 1.0f,   0.0f, 0.0f,   // bottom left
-		-0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 1.0f,   0.0f, 1.0f    // top left 
-	};
-	*/
 
 	unsigned int indices[] = {
 		0, 1, 3,   // first triangle

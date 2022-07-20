@@ -87,6 +87,8 @@ namespace UEngine
 
 		materialInstance->UploadData();
 
+		ApplyMaterialFlags();
+
 		glDrawElements(GL_TRIANGLES, vao->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
 	}
 
@@ -120,5 +122,13 @@ namespace UEngine
 		}
 
 		Render(rectangleVao, transform);
+	}
+
+	void OpenGLRenderer2D::ApplyMaterialFlags()
+	{
+		const auto& flags = materialInstance->GetMaterial()->Flags;
+
+		flags.EnableBlending ? glEnable(GL_BLEND) : glDisable(GL_BLEND);
+		flags.EnableDepthTest ? glEnable(GL_DEPTH_TEST) : glDisable(GL_DEPTH_TEST);
 	}
 }
