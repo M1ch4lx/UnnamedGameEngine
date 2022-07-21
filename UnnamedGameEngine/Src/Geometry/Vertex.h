@@ -58,8 +58,8 @@ namespace UEngine
 
 		Vertex() = default;
 
-		Vertex(const Vector3& position) :
-			Position(position)
+		Vertex(const Vector3& Position) :
+			Position(Position)
 		{}
 
 		Vertex(float x, float y, float z) :

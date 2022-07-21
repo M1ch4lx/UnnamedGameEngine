@@ -15,6 +15,8 @@ namespace UEngine
 
 		VertexLayout layout;
 
+		BufferUsage usage;
+
 	public:
 		OpenGLVertexBuffer();
 
@@ -22,11 +24,15 @@ namespace UEngine
 
 		void Bind() override;
 
-		void SetData(const void* vertecies, unsigned int verticesCount, const VertexLayout& layout) override;
+		void SetVertices(const void* vertecies, unsigned int verticesCount, const VertexLayout& layout) override;
+
+		void SetStaticData(const void* vertecies, unsigned int verticesCount, const VertexLayout& layout) override;
 
 		const VertexLayout& GetLayout() const override;
 
-		virtual unsigned int GetCount() const override;
+		unsigned int GetCount() const override;
+
+		BufferUsage Usage() const override;
 	};
 
 	class OpenGLIndexBuffer :public IndexBuffer

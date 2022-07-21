@@ -15,10 +15,10 @@ namespace UEngine
 		glClear(GL_COLOR_BUFFER_BIT);
 	}
 
-	void OpenGLRenderer2D::SetClearColor(const Color3& color)
+	void OpenGLRenderer2D::SetClearColor(const Color3& Color)
 	{
-		clearColor = color;
-		glClearColor(color.r, color.g, color.b, 1.f);
+		clearColor = Color;
+		glClearColor(Color.r, Color.g, Color.b, 1.f);
 	}
 
 	const Color3& OpenGLRenderer2D::GetClearColor() const
@@ -114,7 +114,7 @@ namespace UEngine
 			const auto& layout = Vertex::Layout();
 
 			auto vbo = factory->CreateVertexBuffer();
-			vbo->SetData(vertices, 4, layout);
+			vbo->SetVertices(vertices, 4, layout);
 
 			auto ibo = factory->CreateIndexBuffer(indices, 6);
 

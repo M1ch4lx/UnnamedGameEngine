@@ -52,6 +52,6 @@ namespace UEngine
 
 	Matrix4 Camera2D::GetProjectionMatrix() const
 	{
-		return Math::Orthographic2D(GetDimensions(), 0.f, 100.f);
+		return Math::Orthographic2D(GetDimensions(), -1.f, 100.f);
 	}
 }

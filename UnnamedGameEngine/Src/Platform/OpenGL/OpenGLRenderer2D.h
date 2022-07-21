@@ -27,7 +27,7 @@ namespace UEngine
 
 		void ClearScreen() override;
 
-		void SetClearColor(const Color3& color) override;
+		void SetClearColor(const Color3& Color) override;
 
 		const Color3& GetClearColor() const override;
 

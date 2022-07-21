@@ -7,6 +7,7 @@
 #include "Platform/GraphicsLibrary.h"
 #include "Data/Image.h"
 #include "Renderer/2D/Sprite2D.h"
+#include "Geometry/GeometryFactory.h"
 
 // TODO:
 // - Add RenderLayer2D class which will use Z component to sort objects with depth testing,
@@ -180,9 +181,13 @@ void Application::Run(int argc, char* argv[])
 	auto texture = factory->CreateTexture(image);
 	texture->Bind(0);
 
-	Sprite2D sprite("sad", texture);
+	Sprite sprite("sad", texture);
 
 	auto rect = sprite.GetBoundingRect();
+
+	Service<GeometryFactory> geometry;
+
+	auto mesh = geometry->CreateMesh<VertexTexColor>(4, 6);
 
 	VertexTexColor vertices[4]
 	{
@@ -191,13 +196,16 @@ void Application::Run(int argc, char* argv[])
 		{ {rect.Left, rect.Bottom, 0.0f}, {0.f, 0.f}, { 1.f, 0.f, 1.f, 1.f } },  // bottom left
 		{ {rect.Left, rect.Top, 0.0f}, {0.f, 1.f}, { 1.f, 0.f, 1.f, 1.f } }   // top left 
 	};
-
 	unsigned int indices[] = {
 		0, 1, 3,   // first triangle
 		1, 2, 3    // second triangle
 	};
-	auto texIbo = factory->CreateIndexBuffer(indices, 6);
-	texVbo->SetData(vertices, 4, VertexTexColor::Layout());
+
+	mesh->SetVertices(vertices, 4);
+	mesh->SetIndices(indices, 6);
+	
+	auto texIbo = factory->CreateIndexBuffer(mesh->GetIndices(), 6);
+	texVbo->SetVertices(mesh->GetVertices(), 4, VertexTexColor::Layout());
 
 	auto texVao = factory->CreateVertexArray(texVbo, texIbo);
 
@@ -246,13 +254,6 @@ void Application::Run(int argc, char* argv[])
 		// Render scene
 		//renderer2D->RenderRectangle(model);
 		renderer2D->Render(texVao, model);
-
-		/*
-		texVao->Bind();
-		textureShader->Bind();
-		textureShader->SetUniform("m_textureSampler", 0);
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-		*/
 
 		// Render GUI
 		//glClear(GL_DEPTH_BUFFER_BIT);

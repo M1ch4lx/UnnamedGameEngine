@@ -4,7 +4,7 @@
 namespace UEngine
 {
 	OpenGLVertexBuffer::OpenGLVertexBuffer() :
-		id(0), count(0)
+		id(0), count(0), usage(BufferUsage::Unspecified)
 	{
 		glCreateBuffers(1, &id);
 	}
@@ -16,13 +16,12 @@ namespace UEngine
 
 	void OpenGLVertexBuffer::Bind()
 	{
-		REMEMBER_BINDING();
-
 		glBindBuffer(GL_ARRAY_BUFFER, id);
 	}
 
-	void OpenGLVertexBuffer::SetData(const void* vertecies, unsigned int verticesCount, const VertexLayout& layout)
+	void OpenGLVertexBuffer::SetVertices(const void* vertecies, unsigned int verticesCount, const VertexLayout& layout)
 	{
+		usage = BufferUsage::Dynamic;
 		glBindBuffer(GL_ARRAY_BUFFER, id);
 		this->layout = layout;
 		auto dataSize = verticesCount * layout.Stride();
@@ -37,6 +36,16 @@ namespace UEngine
 		glBufferSubData(GL_ARRAY_BUFFER, 0, dataSize, vertecies);
 	}
 
+	void OpenGLVertexBuffer::SetStaticData(const void* vertecies, unsigned int verticesCount, const VertexLayout& layout)
+	{
+		usage = BufferUsage::Static;
+		glBindBuffer(GL_ARRAY_BUFFER, id);
+		this->layout = layout;
+		auto dataSize = verticesCount * layout.Stride();
+
+		glBufferData(GL_ARRAY_BUFFER, dataSize, vertecies, GL_STATIC_DRAW);
+	}
+
 	const VertexLayout& OpenGLVertexBuffer::GetLayout() const
 	{
 		return layout;
@@ -45,6 +54,11 @@ namespace UEngine
 	unsigned int OpenGLVertexBuffer::GetCount() const
 	{
 		return count;
+	}
+
+	BufferUsage OpenGLVertexBuffer::Usage() const
+	{
+		return usage;
 	}
 
 	OpenGLIndexBuffer::OpenGLIndexBuffer(unsigned int* indices, unsigned int count) :
@@ -63,8 +77,6 @@ namespace UEngine
 
 	void OpenGLIndexBuffer::Bind()
 	{
-		REMEMBER_BINDING();
-		
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id);
 	}
 

@@ -15,7 +15,7 @@ namespace UEngine
 	class Transform :public Component
 	{
 	private:
-		Vec position;
+		Vec Position;
 
 		virtual void OnAttach() override
 		{
@@ -30,7 +30,7 @@ namespace UEngine
 	public:
 		Vec& GetPosition()
 		{
-			return position;
+			return Position;
 		}
 	};
 }

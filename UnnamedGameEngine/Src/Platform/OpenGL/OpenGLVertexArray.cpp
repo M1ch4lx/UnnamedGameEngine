@@ -59,7 +59,6 @@ namespace UEngine
 
 	void OpenGLVertexArray::Bind()
 	{
-		REMEMBER_BINDING();
 		glBindVertexArray(id);
 	}
 
