@@ -45,6 +45,8 @@ namespace UEngine
 			 
 		virtual void Upload(const Matrix4& matrix) = 0;
 
+		virtual void Upload(const int* values, unsigned int count) = 0;
+
 		virtual Shader* ShaderProgram() = 0;
 
 		virtual void BindShader() = 0;

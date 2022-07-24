@@ -2,7 +2,7 @@
 
 #include "Math/Math.h"
 
-#include "Geometry/Vertex.h"
+#include "Renderer/Vertex.h"
 
 namespace UEngine
 {

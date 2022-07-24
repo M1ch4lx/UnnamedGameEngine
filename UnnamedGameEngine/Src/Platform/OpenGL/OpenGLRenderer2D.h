@@ -8,9 +8,27 @@
 
 namespace UEngine
 {
+	struct RectangleVertex
+	{
+		Vector3 ModelPosition;
+		Vector2 Translation;
+		float Rotation;
+		Color4 Color;
+		int TexSlot;
+		Vector2 TexCoord;
+
+		RectangleVertex() :
+			TexSlot(0), Rotation(0.f)
+		{}
+
+		static const VertexLayout& Layout();
+	};
+
 	class OpenGLRenderer2D :public Renderer2D
 	{
 	private:
+		static constexpr unsigned int NoTextureSlot = 32;
+
 		RenderContext* context;
 
 		// ViewProjection matrix
@@ -18,9 +36,39 @@ namespace UEngine
 
 		Color3 clearColor;
 
-		Ref<MaterialInstance> materialInstance;
-
 		DenormalizedViewport viewport;
+
+		struct RectangleBatchData
+		{
+			Batch batch;
+
+			Ref<MaterialInstance> MaterialInstance;
+
+			Ref<VertexArray> Vao;
+
+			Ref<VertexBuffer> Vbo;
+
+			Ref<IndexBuffer> Ibo;
+
+			std::vector<RectangleVertex> Vertices;
+
+			const unsigned int RectanglesCapacity = 1000;
+
+			const unsigned int MaxTextures = 16;
+
+			unsigned int UsedVertices = 0;
+
+			unsigned int UsedRectangles = 0;
+
+			unsigned int UsedTextures = 0;
+
+			std::vector<Ref<BatchTexture>> BatchTextures;
+
+			std::vector<unsigned int> TextureSlots;
+
+			RectangleBatchData();
+
+		} rectangleBatch;
 
 	public:
 		OpenGLRenderer2D(RenderContext* context);
@@ -41,13 +89,15 @@ namespace UEngine
 
 		void Display() override;
 
-		void SetMaterial(const Ref<MaterialInstance>& materialInstance) override;
+		void NextBatch(const Ref<MaterialInstance>& materialInstance) override;
 
-		void Render(const Ref<VertexArray>& vao, const Transformation2D& transform) override;
+		void RenderBatch() override;
 
-		void RenderRectangle(const Transformation2D& transform) override;
+		void RenderRectangle(const Transformation2D& transform, const Color4& color) override;
+
+		void RenderSprite(const Transformation2D& transform, const Color4& color, const Ref<Sprite>& sprite) override;
 
 	private:
-		void ApplyMaterialFlags();
+		void ApplyMaterialFlags(const Ref<MaterialInstance>& materialInstance);
 	};
 }

@@ -7,13 +7,14 @@
 #include "Renderer/Shader.h"
 #include "Renderer/Material.h"
 #include "Renderer/VertexTypes.h"
-#include "Renderer/Batch.h"
 
 #include "Core/Common.h"
 
 #include "Geometry/2D/Transformation2D.h"
 
 #include "Camera2D.h"
+
+#include "Renderer/Sprite.h"
 
 namespace UEngine
 {
@@ -36,10 +37,12 @@ namespace UEngine
 
 		virtual RenderContext* GetContext() const = 0;
 
-		virtual void SetMaterial(const Ref<MaterialInstance>& materialInstance) = 0;
+		virtual void NextBatch(const Ref<MaterialInstance>& materialInstance) = 0;
 
-		virtual void Render(const Ref<VertexArray>& vao, const Transformation2D& transform) = 0;
+		virtual void RenderBatch() = 0;
 
-		virtual void RenderRectangle(const Transformation2D& transform) = 0;
+		virtual void RenderRectangle(const Transformation2D& transform, const Color4& color) = 0;
+
+		virtual void RenderSprite(const Transformation2D& transform, const Color4& color, const Ref<Sprite>& sprite) = 0;
 	};
 }

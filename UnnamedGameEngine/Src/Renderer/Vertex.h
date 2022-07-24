@@ -8,7 +8,9 @@ namespace UEngine
 {
 	enum class VertexElementType
 	{
-		Float, Float2, Float3, Float4, None
+		Float, Float2, Float3, Float4,
+		Int,
+		None
 	};
 
 	unsigned int VertexElementTypeSize(VertexElementType elementType);

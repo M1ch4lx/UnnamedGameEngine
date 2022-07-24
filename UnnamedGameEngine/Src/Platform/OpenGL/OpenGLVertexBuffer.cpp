@@ -19,7 +19,7 @@ namespace UEngine
 		glBindBuffer(GL_ARRAY_BUFFER, id);
 	}
 
-	void OpenGLVertexBuffer::SetVertices(const void* vertecies, unsigned int verticesCount, const VertexLayout& layout)
+	void OpenGLVertexBuffer::SetData(const void* vertecies, unsigned int verticesCount, const VertexLayout& layout)
 	{
 		usage = BufferUsage::Dynamic;
 		glBindBuffer(GL_ARRAY_BUFFER, id);

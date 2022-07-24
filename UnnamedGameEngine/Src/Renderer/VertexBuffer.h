@@ -2,7 +2,7 @@
 
 #include "Core/FactoryObject.h"
 
-#include "Geometry/Vertex.h"
+#include "Renderer/Vertex.h"
 
 namespace UEngine
 {
@@ -16,7 +16,7 @@ namespace UEngine
 	public:
 		virtual void Bind() = 0;
 
-		virtual void SetVertices(const void* vertecies, unsigned int verticesCount, const VertexLayout& layout) = 0;
+		virtual void SetData(const void* vertecies, unsigned int verticesCount, const VertexLayout& layout) = 0;
 
 		virtual void SetStaticData(const void* vertecies, unsigned int verticesCount, const VertexLayout& layout) = 0;
 

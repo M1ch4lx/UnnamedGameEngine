@@ -110,5 +110,7 @@ namespace UEngine
 		const std::unordered_map<std::string, Ref<Material>>& Materials() const;
 
 		Ref<MaterialInstance> CreateMaterialInstance(const std::string& matName);
+
+		Ref<MaterialInstance> CreateMaterialInstance(const Ref<Material>& material);
 	};
 }

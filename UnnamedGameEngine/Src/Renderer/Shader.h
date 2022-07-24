@@ -51,6 +51,8 @@ namespace UEngine
 
 		void SetUniform(const std::string& name, const Matrix4& matrix);
 
+		void SetUniform(const std::string& name, const int* values, unsigned int count);
+
 		virtual Ref<Uniform> GetUniform(const std::string& name) = 0;
 
 		virtual const std::vector<Ref<Uniform>>& GetUniforms() = 0;

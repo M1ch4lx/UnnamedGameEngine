@@ -74,6 +74,11 @@ namespace UEngine
 		GetUniform(name)->Upload(matrix);
 	}
 
+	void Shader::SetUniform(const std::string& name, const int* values, unsigned int count)
+	{
+
+	}
+
 	void ShaderLibrary::AddShader(const std::string& name, const Ref<Shader>& shader)
 	{
 		shaders[name] = shader;

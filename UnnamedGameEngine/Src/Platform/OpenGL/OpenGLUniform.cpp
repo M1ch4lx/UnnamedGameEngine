@@ -70,6 +70,11 @@ namespace UEngine
 		glUniformMatrix4fv(location, 1, GL_TRUE, matrix.ConstData());
 	}
 
+	void OpenGLUniform::Upload(const int* values, unsigned int count)
+	{
+		glUniform1iv(location, count, values);
+	}
+
 	Shader* OpenGLUniform::ShaderProgram()
 	{
 		return shader;

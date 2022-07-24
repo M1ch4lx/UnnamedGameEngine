@@ -24,7 +24,7 @@ namespace UEngine
 
 		void Bind() override;
 
-		void SetVertices(const void* vertecies, unsigned int verticesCount, const VertexLayout& layout) override;
+		void SetData(const void* vertecies, unsigned int verticesCount, const VertexLayout& layout) override;
 
 		void SetStaticData(const void* vertecies, unsigned int verticesCount, const VertexLayout& layout) override;
 

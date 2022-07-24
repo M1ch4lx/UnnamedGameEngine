@@ -46,7 +46,9 @@ namespace UEngine
 
 		void Upload(const Color3& val) override;
 
-		void Upload(const UEngine::Matrix4& matrix) override;
+		void Upload(const Matrix4& matrix) override;
+
+		void Upload(const int* values, unsigned int count) override;
 
 		Shader* ShaderProgram() override;
 

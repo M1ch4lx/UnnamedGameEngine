@@ -6,7 +6,6 @@
 
 #include "Platform/GraphicsLibrary.h"
 #include "Data/Image.h"
-#include "Renderer/2D/Sprite2D.h"
 #include "Geometry/GeometryFactory.h"
 
 // TODO:
@@ -130,87 +129,47 @@ void Application::Run(int argc, char* argv[])
 			applicationRunning = false;
 		});
 
-	window->ConnectSignal<WindowResizeSignal>([&](WindowResizeSignal& signal)
-		{
-			return;
-		});
-
-	auto flatColorShader = factory->CreateShader(
-		ShaderSource("Assets/Shaders/BasicVertex.glsl"),
-		ShaderSource("Assets/Shaders/FlatColor.glsl")
-	);
-
-	auto textureShader = factory->CreateShader(
-		ShaderSource("Assets/Shaders/TextureVertexShader.glsl"),
-		ShaderSource("Assets/Shaders/TextureFragmentShader.glsl")
-	);
-
 	Service<MaterialLibrary> materialLibrary;
-
-	const auto& flatColorMat = materialLibrary->CreateMaterial("FlatColorMat", flatColorShader);
-
-	Ref<MaterialInstance> mi(new MaterialInstance(flatColorMat));
-	mi->Set("m_Color", Color4(0.5f, 0.5f, 0.5f, 1.f));
-
-	const auto& textureMat = materialLibrary->CreateMaterial("TextureMaterial", textureShader);
-
-	Ref<MaterialInstance> texMi(new MaterialInstance(textureMat));
-	
-	renderer2D->SetMaterial(texMi);
 
 	Image image;
 	image.LoadFromFile("Assets/Textures/test.png");
+	
+	auto texture = factory->CreateTexture(image);
+
+	Ref<Spritesheet> spritesheet = Ref<Spritesheet>(new Spritesheet("Test", texture));
+	const auto& sprite = spritesheet->Sprites().front();
 
 	Camera2D camera;
 
 	Transformation2D model;
 	model.Position = Vector(0.f, 0.f);
-	model.Scale = Vector(1.f, 1.f);
+
+	Transformation2D model2;
+	model2.Position = Vector(1.f, 1.f);
+
+	Transformation2D model3;
+	model3.Position = Vector(-1.f, -1.f);
+
+	Transformation2D texturedModel;
+	texturedModel.Position = Vector(-3.f, -3.f);
 
 	Timer timer;
 
 	float cameraSize = camera.GetSize();
 
-	auto texVbo = factory->CreateVertexBuffer();
-
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	textureMat->Flags.EnableBlending = true;
-
 	renderer2D->SetClearColor(Color(1.f, 0.f, 1.f));
 
-	auto texture = factory->CreateTexture(image);
-	texture->Bind(0);
+	const auto& shader = factory->CreateShader(
+		ShaderSource("Assets/Shaders/BatchRenderer2DVert.glsl"),
+		ShaderSource("Assets/Shaders/BatchRenderer2DFrag.glsl")
+	);
 
-	Sprite sprite("sad", texture);
+	const auto& material = materialLibrary->CreateMaterial("BatchRenderer2DMat", shader);
 
-	auto rect = sprite.GetBoundingRect();
+	auto mi = materialLibrary->CreateMaterialInstance(material);
 
-	Service<GeometryFactory> geometry;
-
-	auto mesh = geometry->CreateMesh<VertexTexColor>(4, 6);
-
-	VertexTexColor vertices[4]
-	{
-		{ {rect.Right, rect.Top, 0.0f},  {1.f, 1.f}, { 1.f, 0.f, 1.f, 1.f }},   // top right
-		{ {rect.Right, rect.Bottom, 0.0f},  {1.f, 0.f}, { 1.f, 0.f, 1.f, 1.f } },   // bottom right
-		{ {rect.Left, rect.Bottom, 0.0f}, {0.f, 0.f}, { 1.f, 0.f, 1.f, 1.f } },  // bottom left
-		{ {rect.Left, rect.Top, 0.0f}, {0.f, 1.f}, { 1.f, 0.f, 1.f, 1.f } }   // top left 
-	};
-	unsigned int indices[] = {
-		0, 1, 3,   // first triangle
-		1, 2, 3    // second triangle
-	};
-
-	mesh->SetVertices(vertices, 4);
-	mesh->SetIndices(indices, 6);
-	
-	auto texIbo = factory->CreateIndexBuffer(mesh->GetIndices(), 6);
-	texVbo->SetVertices(mesh->GetVertices(), 4, VertexTexColor::Layout());
-
-	auto texVao = factory->CreateVertexArray(texVbo, texIbo);
-
-	// Set texture sampler
-	texMi->Set("m_textureSampler", 0);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	material->Flags.EnableBlending = true;
 
 	auto renderImGui = [&]()
 	{
@@ -252,8 +211,17 @@ void Application::Run(int argc, char* argv[])
 		renderer2D->BeginScene(camera);
 
 		// Render scene
-		//renderer2D->RenderRectangle(model);
-		renderer2D->Render(texVao, model);
+		renderer2D->NextBatch(mi);
+
+		renderer2D->RenderRectangle(model, Color4(0.f, 0.f, 0.f, 1.f));
+		renderer2D->RenderRectangle(model2, Color4(1.f, 1.f, 1.f, 1.f));
+		renderer2D->RenderRectangle(model3, Color4(0.f, 1.f, 0.f, 1.f));
+
+		renderer2D->RenderSprite(texturedModel, Color4(1.f, 1.f, 1.f, 1.f), sprite);
+
+		renderer2D->RenderSprite(model, Color4(1.f, 1.f, 1.f, 1.f), sprite);
+
+		renderer2D->RenderBatch();
 
 		// Render GUI
 		//glClear(GL_DEPTH_BUFFER_BIT);

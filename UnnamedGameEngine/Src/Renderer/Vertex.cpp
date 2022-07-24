@@ -5,8 +5,8 @@ namespace UEngine
 {
 	unsigned int VertexElementTypeSize(VertexElementType elementType)
 	{
-		static constexpr unsigned int FloatSize = sizeof(float);
-		static constexpr unsigned int IntSize = sizeof(int);
+		constexpr unsigned int FloatSize = sizeof(float);
+		constexpr unsigned int IntSize = sizeof(int);
 
 		switch (elementType)
 		{
@@ -14,6 +14,7 @@ namespace UEngine
 		case VertexElementType::Float2: return FloatSize * 2;
 		case VertexElementType::Float3: return FloatSize * 3;
 		case VertexElementType::Float4: return FloatSize * 4;
+		case VertexElementType::Int: return IntSize;
 		}
 
 		return 0;
@@ -27,6 +28,7 @@ namespace UEngine
 		case VertexElementType::Float2: return 2;
 		case VertexElementType::Float3: return 3;
 		case VertexElementType::Float4: return 4;
+		case VertexElementType::Int: return 1;
 		}
 
 		return 0;

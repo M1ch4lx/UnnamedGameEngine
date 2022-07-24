@@ -182,4 +182,9 @@ namespace UEngine
     {
         return Ref<MaterialInstance>(new MaterialInstance(FindMaterial(matName)));
     }
+
+    Ref<MaterialInstance> MaterialLibrary::CreateMaterialInstance(const Ref<Material>& material)
+    {
+        return Ref<MaterialInstance>(new MaterialInstance(material));
+    }
 }

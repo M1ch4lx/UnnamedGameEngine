@@ -3,7 +3,7 @@
 #include "Core/Common.h"
 #include "Core/FactoryObject.h"
 
-#include "Vertex.h"
+#include "Renderer/Vertex.h"
 
 namespace UEngine
 {
@@ -22,7 +22,7 @@ namespace UEngine
 			indices.resize(indicesCount);
 		}
 
-		void SetVertices(VertexType* data, unsigned int count)
+		void SetData(VertexType* data, unsigned int count)
 		{
 			if (count > vertices.size())
 			{
