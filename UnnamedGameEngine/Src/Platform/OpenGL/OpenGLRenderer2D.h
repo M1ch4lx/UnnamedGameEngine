@@ -6,6 +6,8 @@
 
 #include "Renderer/GraphicsFactory.h"
 
+#include "Renderer/Shape.h"
+
 namespace UEngine
 {
 	struct RectangleVertex
@@ -40,7 +42,9 @@ namespace UEngine
 
 		struct RectangleBatchData
 		{
-			Batch batch;
+			TextureSlotsBuffer textureSlots;
+
+			Shape shape;
 
 			Ref<MaterialInstance> MaterialInstance;
 
@@ -54,17 +58,9 @@ namespace UEngine
 
 			const unsigned int RectanglesCapacity = 1000;
 
-			const unsigned int MaxTextures = 16;
-
 			unsigned int UsedVertices = 0;
 
 			unsigned int UsedRectangles = 0;
-
-			unsigned int UsedTextures = 0;
-
-			std::vector<Ref<BatchTexture>> BatchTextures;
-
-			std::vector<unsigned int> TextureSlots;
 
 			RectangleBatchData();
 

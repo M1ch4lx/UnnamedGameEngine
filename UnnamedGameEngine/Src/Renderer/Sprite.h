@@ -2,7 +2,7 @@
 
 #include "Renderer/Texture.h"
 
-#include "Batch.h"
+#include "TextureSlots.h"
 
 namespace UEngine
 {
@@ -10,8 +10,6 @@ namespace UEngine
 	{
 	public:
 		virtual const Ref<Texture>& GetTexture() const = 0;
-
-		virtual Ref<BatchTexture>& GetBatchTexture() = 0;
 
 		virtual const std::string& Name() const = 0;
 
@@ -47,8 +45,6 @@ namespace UEngine
 
 		const Ref<Texture>& GetTexture() const;
 
-		Ref<BatchTexture>& GetBatchTexture();
-
 		const ISpritesheet* GetSpritesheet() const;
 
 	private:
@@ -68,16 +64,12 @@ namespace UEngine
 
 		std::vector<Ref<Sprite>> sprites;
 
-		Ref<BatchTexture> batchTexture;
-
 	public:
 		Spritesheet(const std::string& name, const Ref<Texture>& texture);
 
 		const std::string& Name() const override;
 
 		const Ref<Texture>& GetTexture() const override;
-
-		Ref<BatchTexture>& GetBatchTexture() override;
 
 		float GetPixelsPerUnit() const override;
 

@@ -1,14 +1,22 @@
 #pragma once
 
 #include "Common.h"
-
+#include "Exception.h"
 #include "Service.h"
 #include "System.h"
 #include "Container.h"
 
 namespace UEngine
 {
-	using ComponentTypeID = size_t;
+	class AbortComponentException :public Exception
+	{
+	public:
+		AbortComponentException(const std::string& message) :
+			Exception(message)
+		{}
+	};
+
+	using ComponentTypeID = unsigned int;
 
 	class Entity;
 

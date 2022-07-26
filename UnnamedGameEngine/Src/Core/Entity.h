@@ -25,12 +25,6 @@ namespace UEngine
 
 		std::vector<Component*> components;
 
-		void AttachComponent(Component* component);
-
-		void DetachComponent(Component* component);
-
-		void InheritStatusFromParent();
-
 	public:
 		Entity();
 
@@ -44,8 +38,17 @@ namespace UEngine
 			if (!GetComponent(componentsService->GetComponentTypeID<T>()))
 			{
 				auto component = componentsService->CreateComponent<T>();
-				AttachComponent(component);
-				components.emplace_back(component);
+				try
+				{
+					component->owner = this;
+					component->OnAttach();
+					components.emplace_back(component);
+				}
+				catch (const AbortComponentException& exc)
+				{
+					component->owner = nullptr;
+					// TODO: log error exc.Message()
+				}
 			}
 		}
 
@@ -63,11 +66,18 @@ namespace UEngine
 				{
 					if (component->Type() == type)
 					{
-						DetachComponent(component);
+						component->OnDetach();
+						component->owner = nullptr;
 						return true;
 					}
 					return false;
 				});
+		}
+
+		template<typename T>
+		bool HasComponent()
+		{
+			return GetComponent<T>();
 		}
 
 		void RemoveAllComponents();
@@ -86,6 +96,9 @@ namespace UEngine
 		Entity(Entity&&) = delete;
 		Entity& operator=(const Entity&) = delete;
 		Entity& operator=(Entity&&) = delete;
+
+	private:
+		void InheritStatusFromParent();
 	};
 
 	class EntitiesManager :public IService

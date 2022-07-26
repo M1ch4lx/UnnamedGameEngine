@@ -5,27 +5,6 @@ namespace UEngine
 {
 	Service<ComponentsManager> Entity::componentsService;
 
-	void Entity::AttachComponent(Component* component)
-	{
-		component->owner = this;
-		component->OnAttach();
-	}
-
-	void Entity::DetachComponent(Component* component)
-	{
-		component->OnDetach();
-		component->owner = nullptr;
-	}
-
-	void Entity::InheritStatusFromParent()
-	{
-		if (parent && status.active)
-		{
-			parent->InheritStatusFromParent();
-			status = parent->status;
-		}
-	}
-
 	Entity::Entity() :
 		parent(nullptr)
 	{
@@ -53,7 +32,8 @@ namespace UEngine
 	{
 		for (auto component : components)
 		{
-			DetachComponent(component);
+			component->OnDetach();
+			component->owner = nullptr;
 		}
 		components.clear();
 	}
@@ -87,6 +67,15 @@ namespace UEngine
 	Entity* Entity::Parent() const
 	{
 		return parent;
+	}
+
+	void Entity::InheritStatusFromParent()
+	{
+		if (parent && status.active)
+		{
+			parent->InheritStatusFromParent();
+			status = parent->status;
+		}
 	}
 
 	void EntitiesManager::OnDestroy()

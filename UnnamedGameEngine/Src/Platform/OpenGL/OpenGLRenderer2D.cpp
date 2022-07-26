@@ -77,13 +77,8 @@ namespace UEngine
 
 		rectangleBatch.UsedRectangles = 0;
 		rectangleBatch.UsedVertices = 0;
-		rectangleBatch.UsedTextures = 0;
 		
-		for (auto& batchTexture : rectangleBatch.BatchTextures)
-		{
-			batchTexture->SetCurrentBatch(nullptr, NoTextureSlot);
-		}
-		rectangleBatch.BatchTextures.clear();
+		rectangleBatch.textureSlots.ClearTextures();
 	}
 
 	void OpenGLRenderer2D::RenderBatch()
@@ -95,16 +90,15 @@ namespace UEngine
 
 		rectangleBatch.Vao->Bind();
 
-		for (unsigned int i = 0; i < rectangleBatch.UsedTextures; i++)
-		{
-			rectangleBatch.BatchTextures[i]->GetTexture()->Bind(i);
-		}
+		rectangleBatch.textureSlots.BindTextures();
 
-		if (rectangleBatch.UsedTextures)
+		auto [textureSlots, usedSlots] = rectangleBatch.textureSlots.SlotsUsage();
+
+		if (usedSlots)
 		{
 			shader->SetUniform("TextureSamplers",
-				reinterpret_cast<int*>(rectangleBatch.TextureSlots.data()),
-				rectangleBatch.UsedTextures);
+				reinterpret_cast<const int*>(textureSlots),
+				usedSlots);
 		}
 
 		shader->SetUniform("ViewProjection", viewProjectionMatrix);
@@ -118,23 +112,6 @@ namespace UEngine
 
 		glDrawElements(GL_TRIANGLES, rectangleBatch.UsedRectangles * 6, GL_UNSIGNED_INT, nullptr);
 	}
-
-	/*void OpenGLRenderer2D::Render(const Ref<VertexArray>& vao, const Transformation2D& transform)
-	{
-		const auto& shader = rectangleBatch.->GetMaterial()->GetShader();
-		shader->Bind();
-		vao->Bind();
-
-		shader->SetUniform("ViewProjection", viewProjectionMatrix);
-		shader->SetUniform("Transform", transform.ToMatrix());
-
-		materialInstance->UploadData();
-
-		ApplyMaterialFlags();
-
-		glDrawElements(GL_TRIANGLES, vao->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
-		
-	}*/
 
 	void OpenGLRenderer2D::RenderRectangle(const Transformation2D& transform, const Color4& color)
 	{
@@ -197,28 +174,13 @@ namespace UEngine
 		const auto& textureCoords = sprite->GetTextureCoords();
 		const auto& boundingRect = sprite->GetBoundingRect();
 
-		unsigned int textureSlot = NoTextureSlot;
-
-		auto& batchTexture = sprite->GetBatchTexture();
-		auto [batch, slot] = batchTexture->GetCurrentBatch();
-		if (batch == &rectangleBatch.batch)
+		unsigned int textureSlot = rectangleBatch.textureSlots.AddTexture(texture);
+		if (textureSlot == TextureSlotsBuffer::InvalidTextureSlot)
 		{
-			textureSlot = slot;
+			RenderBatch();
+			NextBatch(rectangleBatch.MaterialInstance);
 		}
-		else
-		{
-			if (rectangleBatch.BatchTextures.size() == rectangleBatch.MaxTextures)
-			{
-				RenderBatch();
-				NextBatch(rectangleBatch.MaterialInstance);
-			}
-			textureSlot = static_cast<unsigned int>(rectangleBatch.BatchTextures.size());
-			rectangleBatch.BatchTextures.push_back(batchTexture);
-			batchTexture->SetCurrentBatch(&rectangleBatch.batch, textureSlot);
-		}
-
-		rectangleBatch.UsedTextures = static_cast<unsigned int>(
-			rectangleBatch.BatchTextures.size());
+		textureSlot = rectangleBatch.textureSlots.AddTexture(texture);
 
 		Transformation2D transformation = transform;
 		transformation.Scale.x *= sprite->GetSize().x / 2.f;
@@ -241,38 +203,6 @@ namespace UEngine
 		rectangle.BottomLeft.TexSlot = textureSlot;
 		rectangle.TopLeft.TexSlot = textureSlot;
 	}
-	
-	/*void OpenGLRenderer2D::RenderRectangle(const Transformation2D& transform)
-	{
-		static Ref<VertexArray> rectangleVao;
-		if (!rectangleVao)
-		{
-			Vertex vertices[] = {
-			{ 1.f,  1.f, 0.0f},   // top right
-			{ 1.f, -1.f, 0.0f },   // bottom right
-			{ -1.f, -1.f, 0.0f },  // bottom left
-			{ -1.f,  1.f, 0.0f }   // top left 
-			};
-
-			unsigned int indices[] = {
-				0, 1, 3,   // first triangle
-				1, 2, 3    // second triangle
-			};
-
-			auto factory = GraphicsFactory::Get();
-
-			const auto& layout = Vertex::Layout();
-
-			auto vbo = factory->CreateVertexBuffer();
-			vbo->SetVertices(vertices, 4, layout);
-
-			auto ibo = factory->CreateIndexBuffer(indices, 6);
-
-			rectangleVao = factory->CreateVertexArray(vbo, ibo);
-		}
-
-		Render(rectangleVao, transform);
-	}*/
 
 	void OpenGLRenderer2D::ApplyMaterialFlags(const Ref<MaterialInstance>& materialInstance)
 	{
@@ -282,7 +212,8 @@ namespace UEngine
 		flags.EnableDepthTest ? glEnable(GL_DEPTH_TEST) : glDisable(GL_DEPTH_TEST);
 	}
 
-	OpenGLRenderer2D::RectangleBatchData::RectangleBatchData()
+	OpenGLRenderer2D::RectangleBatchData::RectangleBatchData() :
+		shape(4, 6, { 0, 1, 3, 1, 2, 3 })
 	{
 		Vertices.resize(RectanglesCapacity * 4);
 		auto factory = GraphicsFactory::Get();
@@ -293,24 +224,12 @@ namespace UEngine
 		std::vector<unsigned int> indices;
 		indices.resize(RectanglesCapacity * 6);
 
-		unsigned int pattern[6] = { 0, 1, 3, 1, 2, 3 };
-
-		for (unsigned int i = 0; i < indices.size(); i++)
-		{
-			indices[i] = pattern[i % 6] + ((i / 6) * 4);
-		}
+		shape.IndexShapes(indices.data(), 0, RectanglesCapacity);
 
 		Ibo = factory->CreateIndexBuffer(indices.data(),
 			static_cast<unsigned int>(indices.size()));
 
 		Vao = factory->CreateVertexArray(Vbo, Ibo);
-
-		BatchTextures.reserve(16);
-		TextureSlots.resize(16);
-		for (unsigned int i = 0; i < TextureSlots.size(); i++)
-		{
-			TextureSlots[i] = i;
-		}
 	}
 
 	const VertexLayout& RectangleVertex::Layout()

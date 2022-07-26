@@ -24,11 +24,6 @@ namespace UEngine
 		return spritesheet->GetTexture();
 	}
 
-	Ref<BatchTexture>& Sprite::GetBatchTexture()
-	{
-		return spritesheet->GetBatchTexture();
-	}
-
 	const ISpritesheet* Sprite::GetSpritesheet() const
 	{
 		return spritesheet;
@@ -59,8 +54,7 @@ namespace UEngine
 	}
 
 	Spritesheet::Spritesheet(const std::string& name, const Ref<Texture>& texture) :
-		pixelsPerUnit(DefaultPixelsPerUnit), name(name), texture(texture),
-		batchTexture(new BatchTexture(texture))
+		pixelsPerUnit(DefaultPixelsPerUnit), name(name), texture(texture)
 	{
 		sprites.emplace_back(new Sprite(name + "_0", this, Rect(1.f, 0.f, 0.f, 1.f)));
 	}
@@ -73,11 +67,6 @@ namespace UEngine
 	const Ref<Texture>& Spritesheet::GetTexture() const
 	{
 		return texture;
-	}
-
-	Ref<BatchTexture>& Spritesheet::GetBatchTexture()
-	{
-		return batchTexture;
 	}
 
 	float Spritesheet::GetPixelsPerUnit() const

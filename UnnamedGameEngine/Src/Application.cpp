@@ -169,7 +169,9 @@ void Application::Run(int argc, char* argv[])
 	auto mi = materialLibrary->CreateMaterialInstance(material);
 
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glDepthFunc(GL_LEQUAL);
 	material->Flags.EnableBlending = true;
+	material->Flags.EnableDepthTest = true;
 
 	auto renderImGui = [&]()
 	{
@@ -207,6 +209,8 @@ void Application::Run(int argc, char* argv[])
 		camera.SetSize(cameraSize);
 
 		renderer2D->ClearScreen();
+
+		renderer2D->ClearDepth();
 
 		renderer2D->BeginScene(camera);
 
